@@ -51,7 +51,13 @@ CREATE TABLE IF NOT EXISTS orders (
  total INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'New', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS offers (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
 `);
+const productCols = db.prepare('PRAGMA table_info(products)').all().map(c=>c.name);
+if (!productCols.includes('image')) db.exec('ALTER TABLE products ADD COLUMN image TEXT NOT NULL DEFAULT \'\'');
+const orderCols = db.prepare('PRAGMA table_info(orders)').all().map(c=>c.name);
+if (!orderCols.includes('delivery_zone')) db.exec("ALTER TABLE orders ADD COLUMN delivery_zone TEXT NOT NULL DEFAULT 'inside'");
+if (!orderCols.includes('delivery_fee')) db.exec('ALTER TABLE orders ADD COLUMN delivery_fee INTEGER NOT NULL DEFAULT 70');
 const count = db.prepare('SELECT COUNT(*) AS n FROM products').get().n;
 if (!count) {
  const seed = [
@@ -74,7 +80,7 @@ if (!db.prepare('SELECT id FROM admins WHERE username=?').get(adminUser)) {
 }
 app.disable('x-powered-by');
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(express.json({ limit: '100kb' }));
+app.use(express.json({ limit: '6mb' }));
 app.use(express.urlencoded({ extended: false, limit: '100kb' }));
 app.use(session({
  name: 'feriwala.sid', secret: process.env.SESSION_SECRET || crypto.randomBytes(48).toString('hex'),
@@ -85,10 +91,12 @@ const requireAdmin = (req, res, next) => req.session && req.session.adminId ? ne
 const text = (v, max=250) => String(v ?? '').trim().slice(0,max);
 const integer = (v, min=0, max=100000000) => { const n = Number(v); if (!Number.isSafeInteger(n) || n < min || n > max) throw new Error('দাম/স্টকের মান সঠিক নয়।'); return n; };
 app.get('/api/store', (req,res) => res.json({name:process.env.STORE_NAME || 'Feriwala', whatsapp:process.env.WHATSAPP_NUMBER || '', messenger:process.env.FACEBOOK_MESSENGER_URL || ''}));
-app.get('/api/products', (req,res) => res.json(db.prepare('SELECT id,name,category,price,old_price AS oldPrice,emoji,label,description,stock FROM products WHERE active=1 ORDER BY id DESC').all()));
+app.get('/api/offers', (req,res) => res.json(db.prepare('SELECT id,text FROM offers WHERE active=1 ORDER BY id DESC').all()));
+app.get('/api/products', (req,res) => res.json(db.prepare('SELECT id,name,category,price,old_price AS oldPrice,emoji,label,description,stock,image FROM products WHERE active=1 ORDER BY id DESC').all()));
 app.post('/api/orders', (req,res) => {
  try {
   const customer = text(req.body.name,100), phone=text(req.body.phone,24), address=text(req.body.address,500), payment=text(req.body.payment,40) || 'Cash on Delivery';
+  const deliveryZone=req.body.deliveryZone==='outside'?'outside':'inside'; const deliveryFee=deliveryZone==='outside'?120:70;
   if (customer.length < 2 || !/^[0-9+() -]{8,20}$/.test(phone) || address.length < 8) return res.status(400).json({error:'নাম, সঠিক মোবাইল নম্বর ও পূর্ণ ঠিকানা দিন।'});
   if (!Array.isArray(req.body.items) || !req.body.items.length || req.body.items.length > 50) return res.status(400).json({error:'কার্টে প্রোডাক্ট যোগ করুন।'});
   const result = db.transaction(() => {
@@ -99,9 +107,10 @@ app.post('/api/orders', (req,res) => {
     if (p.stock < qty) throw new Error(`${p.name}: বর্তমানে পর্যাপ্ত স্টক নেই।`);
     total += p.price*qty; items.push({id:p.id,name:p.name,price:p.price,qty,emoji:p.emoji});
    }
-   const info=db.prepare('INSERT INTO orders(customer_name,phone,address,payment,items_json,total) VALUES(?,?,?,?,?,?)').run(customer,phone,address,payment,JSON.stringify(items),total);
+   total += deliveryFee;
+   const info=db.prepare('INSERT INTO orders(customer_name,phone,address,payment,items_json,total,delivery_zone,delivery_fee) VALUES(?,?,?,?,?,?,?,?)').run(customer,phone,address,payment,JSON.stringify(items),total,deliveryZone,deliveryFee);
    const upd=db.prepare('UPDATE products SET stock=stock-? WHERE id=?'); items.forEach(i=>upd.run(i.qty,i.id));
-   return {id:info.lastInsertRowid,total};
+   return {id:info.lastInsertRowid,total,subtotal:total-deliveryFee,deliveryFee,deliveryZone};
   })();
   res.status(201).json({message:'অর্ডার গ্রহণ করা হয়েছে।',...result});
  } catch(e) { res.status(400).json({error:e.message || 'অর্ডার করা যায়নি।'}); }
@@ -115,11 +124,15 @@ app.post('/api/admin/login', loginLimiter, (req,res) => {
 app.post('/api/admin/logout', (req,res)=>req.session.destroy(()=>res.json({message:'লগআউট হয়েছে।'})));
 app.get('/api/admin/me', requireAdmin, (req,res)=>res.json({loggedIn:true}));
 app.get('/api/admin/products', requireAdmin, (req,res)=>res.json(db.prepare('SELECT * FROM products ORDER BY id DESC').all()));
+app.get('/api/admin/offers', requireAdmin, (req,res)=>res.json(db.prepare('SELECT * FROM offers ORDER BY id DESC').all()));
+app.post('/api/admin/offers', requireAdmin, (req,res)=>{try{const value=text(req.body.text,500);if(!value)return res.status(400).json({error:'অফারের লেখা দিন।'});const info=db.prepare('INSERT INTO offers(text,active) VALUES(?,1)').run(value);res.status(201).json({id:info.lastInsertRowid,message:'অফার যোগ হয়েছে।'});}catch(e){res.status(400).json({error:'অফার যোগ করা যায়নি।'});}});
+app.delete('/api/admin/offers/:id', requireAdmin, (req,res)=>{const info=db.prepare('DELETE FROM offers WHERE id=?').run(Number(req.params.id));if(!info.changes)return res.status(404).json({error:'অফার পাওয়া যায়নি।'});res.json({message:'অফার মুছে ফেলা হয়েছে।'});});
 app.post('/api/admin/products', requireAdmin, (req,res)=>{
- try {const p=req.body;const info=db.prepare('INSERT INTO products(name,category,price,old_price,emoji,label,description,stock,active) VALUES(?,?,?,?,?,?,?,?,?)').run(text(p.name,120),text(p.category,50),integer(p.price),integer(p.oldPrice||0),text(p.emoji||'🎁',12),text(p.label,40),text(p.description,300),integer(p.stock||0),p.active===false?0:1);res.status(201).json({id:info.lastInsertRowid,message:'প্রোডাক্ট যোগ হয়েছে।'});}catch(e){res.status(400).json({error:e.message||'তথ্য সঠিক নয়।'});}
+ try {const p=req.body;const image=validImage(p.image);const info=db.prepare('INSERT INTO products(name,category,price,old_price,emoji,label,description,stock,active,image) VALUES(?,?,?,?,?,?,?,?,?,?)').run(text(p.name,120),text(p.category,50),integer(p.price),integer(p.oldPrice||0),text(p.emoji||'🎁',12),text(p.label,40),text(p.description,300),integer(p.stock||0),p.active===false?0:1,image);res.status(201).json({id:info.lastInsertRowid,message:'প্রোডাক্ট যোগ হয়েছে।'});}catch(e){res.status(400).json({error:e.message||'তথ্য সঠিক নয়।'});}
 });
+function validImage(value){const image=String(value||'');if(!image)return '';if(image.length>5_000_000||!/^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(image))throw new Error('সঠিক ছবি দিন (PNG/JPG/WebP, সর্বোচ্চ প্রায় 3.5MB)।');return image;}
 app.put('/api/admin/products/:id', requireAdmin, (req,res)=>{
- try {const p=req.body;const info=db.prepare('UPDATE products SET name=?,category=?,price=?,old_price=?,emoji=?,label=?,description=?,stock=?,active=? WHERE id=?').run(text(p.name,120),text(p.category,50),integer(p.price),integer(p.oldPrice||0),text(p.emoji||'🎁',12),text(p.label,40),text(p.description,300),integer(p.stock||0),p.active===false?0:1,integer(req.params.id,1));if(!info.changes)return res.status(404).json({error:'প্রোডাক্ট পাওয়া যায়নি।'});res.json({message:'প্রোডাক্ট আপডেট হয়েছে।'});}catch(e){res.status(400).json({error:e.message||'তথ্য সঠিক নয়।'});}
+ try {const p=req.body;const image=validImage(p.image);const info=db.prepare('UPDATE products SET name=?,category=?,price=?,old_price=?,emoji=?,label=?,description=?,stock=?,active=?,image=? WHERE id=?').run(text(p.name,120),text(p.category,50),integer(p.price),integer(p.oldPrice||0),text(p.emoji||'🎁',12),text(p.label,40),text(p.description,300),integer(p.stock||0),p.active===false?0:1,image,integer(req.params.id,1));if(!info.changes)return res.status(404).json({error:'প্রোডাক্ট পাওয়া যায়নি।'});res.json({message:'প্রোডাক্ট আপডেট হয়েছে।'});}catch(e){res.status(400).json({error:e.message||'তথ্য সঠিক নয়।'});}
 });
 app.delete('/api/admin/products/:id', requireAdmin, (req,res)=>{const info=db.prepare('DELETE FROM products WHERE id=?').run(Number(req.params.id));if(!info.changes)return res.status(404).json({error:'প্রোডাক্ট পাওয়া যায়নি।'});res.json({message:'প্রোডাক্ট ডিলিট হয়েছে।'});});
 app.get('/api/admin/orders', requireAdmin, (req,res)=>res.json(db.prepare('SELECT * FROM orders ORDER BY id DESC LIMIT 500').all().map(o=>({...o,items:JSON.parse(o.items_json)}))));
