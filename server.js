@@ -121,6 +121,7 @@ app.post('/api/orders', (req,res) => {
   res.status(201).json({message:'অর্ডার গ্রহণ করা হয়েছে।',...result});
  } catch(e) { res.status(400).json({error:e.message || 'অর্ডার করা যায়নি।'}); }
 });
+app.get('/api/orders/:id/status', (req,res)=>{try{const id=integer(req.params.id,1), phone=text(req.query.phone,24).replace(/[\\s()-]/g,'');if(!phone||! /^[0-9+]{8,20}$/.test(phone))return res.status(400).json({error:'অর্ডারে দেওয়া সঠিক মোবাইল নম্বর দিন।'});const order=db.prepare('SELECT id,customer_name,phone,items_json,total,status,created_at FROM orders WHERE id=?').get(id);if(!order||String(order.phone).replace(/[\\s()-]/g,'')!==phone)return res.status(404).json({error:'অর্ডার নম্বর বা মোবাইল নম্বর মেলেনি।'});res.json({id:order.id,name:order.customer_name,items:JSON.parse(order.items_json),total:order.total,status:order.status,createdAt:order.created_at});}catch(e){res.status(400).json({error:'অর্ডারের তথ্য পাওয়া যায়নি।'});}});
 app.post('/api/admin/login', loginLimiter, (req,res) => {
  const username=text(req.body.username,100), password=String(req.body.password || '');
  const admin=db.prepare('SELECT id,password_hash FROM admins WHERE username=?').get(username);
