@@ -51,8 +51,14 @@ CREATE TABLE IF NOT EXISTS orders (
  total INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'New', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS offers (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS offers (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, product_id INTEGER, image TEXT NOT NULL DEFAULT '', price INTEGER NOT NULL DEFAULT 0, old_price INTEGER NOT NULL DEFAULT 0, description TEXT NOT NULL DEFAULT '');
 `);
+const offerCols = db.prepare('PRAGMA table_info(offers)').all().map(c=>c.name);
+if (!offerCols.includes('product_id')) db.exec('ALTER TABLE offers ADD COLUMN product_id INTEGER');
+if (!offerCols.includes('image')) db.exec("ALTER TABLE offers ADD COLUMN image TEXT NOT NULL DEFAULT ''");
+if (!offerCols.includes('price')) db.exec('ALTER TABLE offers ADD COLUMN price INTEGER NOT NULL DEFAULT 0');
+if (!offerCols.includes('old_price')) db.exec('ALTER TABLE offers ADD COLUMN old_price INTEGER NOT NULL DEFAULT 0');
+if (!offerCols.includes('description')) db.exec("ALTER TABLE offers ADD COLUMN description TEXT NOT NULL DEFAULT ''");
 const productCols = db.prepare('PRAGMA table_info(products)').all().map(c=>c.name);
 if (!productCols.includes('image')) db.exec('ALTER TABLE products ADD COLUMN image TEXT NOT NULL DEFAULT \'\'');
 const orderCols = db.prepare('PRAGMA table_info(orders)').all().map(c=>c.name);
@@ -91,7 +97,7 @@ const requireAdmin = (req, res, next) => req.session && req.session.adminId ? ne
 const text = (v, max=250) => String(v ?? '').trim().slice(0,max);
 const integer = (v, min=0, max=100000000) => { const n = Number(v); if (!Number.isSafeInteger(n) || n < min || n > max) throw new Error('দাম/স্টকের মান সঠিক নয়।'); return n; };
 app.get('/api/store', (req,res) => res.json({name:process.env.STORE_NAME || 'Feriwala', whatsapp:process.env.WHATSAPP_NUMBER || '', messenger:process.env.FACEBOOK_MESSENGER_URL || ''}));
-app.get('/api/offers', (req,res) => res.json(db.prepare('SELECT id,text FROM offers WHERE active=1 ORDER BY id DESC').all()));
+app.get('/api/offers', (req,res) => res.json(db.prepare('SELECT id,text,product_id AS productId,image,price,old_price AS oldPrice,description FROM offers WHERE active=1 ORDER BY id DESC').all()));
 app.get('/api/products', (req,res) => res.json(db.prepare('SELECT id,name,category,price,old_price AS oldPrice,emoji,label,description,stock,image FROM products WHERE active=1 ORDER BY id DESC').all()));
 app.post('/api/orders', (req,res) => {
  try {
@@ -125,7 +131,7 @@ app.post('/api/admin/logout', (req,res)=>req.session.destroy(()=>res.json({messa
 app.get('/api/admin/me', requireAdmin, (req,res)=>res.json({loggedIn:true}));
 app.get('/api/admin/products', requireAdmin, (req,res)=>res.json(db.prepare('SELECT * FROM products ORDER BY id DESC').all()));
 app.get('/api/admin/offers', requireAdmin, (req,res)=>res.json(db.prepare('SELECT * FROM offers ORDER BY id DESC').all()));
-app.post('/api/admin/offers', requireAdmin, (req,res)=>{try{const value=text(req.body.text,500);if(!value)return res.status(400).json({error:'অফারের লেখা দিন।'});const info=db.prepare('INSERT INTO offers(text,active) VALUES(?,1)').run(value);res.status(201).json({id:info.lastInsertRowid,message:'অফার যোগ হয়েছে।'});}catch(e){res.status(400).json({error:'অফার যোগ করা যায়নি।'});}});
+app.post('/api/admin/offers', requireAdmin, (req,res)=>{try{const value=text(req.body.text,500), productId=req.body.productId?integer(req.body.productId,1):null, image=validImage(req.body.image), price=integer(req.body.price||0), oldPrice=integer(req.body.oldPrice||0), description=text(req.body.description,300);if(!value)return res.status(400).json({error:'অফারের নাম/লেখা দিন।'});if(productId&&!db.prepare('SELECT id FROM products WHERE id=?').get(productId))return res.status(400).json({error:'সঠিক প্রোডাক্ট নির্বাচন করুন।'});const info=db.prepare('INSERT INTO offers(text,active,product_id,image,price,old_price,description) VALUES(?,1,?,?,?,?,?)').run(value,productId,image,price,oldPrice,description);res.status(201).json({id:info.lastInsertRowid,message:'অফার যোগ হয়েছে।'});}catch(e){res.status(400).json({error:e.message||'অফার যোগ করা যায়নি।'});}});
 app.delete('/api/admin/offers/:id', requireAdmin, (req,res)=>{const info=db.prepare('DELETE FROM offers WHERE id=?').run(Number(req.params.id));if(!info.changes)return res.status(404).json({error:'অফার পাওয়া যায়নি।'});res.json({message:'অফার মুছে ফেলা হয়েছে।'});});
 app.post('/api/admin/products', requireAdmin, (req,res)=>{
  try {const p=req.body;const image=validImage(p.image);const info=db.prepare('INSERT INTO products(name,category,price,old_price,emoji,label,description,stock,active,image) VALUES(?,?,?,?,?,?,?,?,?,?)').run(text(p.name,120),text(p.category,50),integer(p.price),integer(p.oldPrice||0),text(p.emoji||'🎁',12),text(p.label,40),text(p.description,300),integer(p.stock||0),p.active===false?0:1,image);res.status(201).json({id:info.lastInsertRowid,message:'প্রোডাক্ট যোগ হয়েছে।'});}catch(e){res.status(400).json({error:e.message||'তথ্য সঠিক নয়।'});}
