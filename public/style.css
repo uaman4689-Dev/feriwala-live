@@ -10,3 +10,12 @@
 
 /* Product browsing and offer banner refinements */
 .show-more{grid-column:1/-1;justify-self:center;margin:10px auto 18px;padding:12px 24px;border:1px solid var(--green);border-radius:24px;background:var(--surface);color:var(--green);font-weight:800;cursor:pointer}.show-more:hover{background:var(--green);color:#fff}.offer-card{grid-template-columns:minmax(220px,34%) minmax(0,1fr)}.offer-card-body{display:flex;flex-direction:column;align-items:flex-start;justify-content:center}.offer-order{margin-top:14px;display:block;max-width:320px}.offer-ribbon{white-space:normal;line-height:1.45;padding:13px 18px}@media(max-width:600px){.show-more{width:100%;margin:8px 0 14px}.offer-card{grid-template-columns:1fr}.offer-order{max-width:none}}
+
+/* Feriwala offer: single wide banner, with the order action underneath */
+#offerSection .offer-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
+#offerSection .offer-card{display:grid!important;grid-template-columns:minmax(0,34%) minmax(0,1fr)!important;align-items:stretch!important;width:100%!important;min-height:240px!important}
+#offerSection .offer-image{height:100%!important;min-height:240px!important}
+#offerSection .offer-card-body{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;padding:clamp(18px,3vw,30px)!important}
+#offerSection .offer-card-body .offer-order{display:block!important;width:auto!important;min-width:200px;max-width:100%!important;margin-top:16px!important;align-self:flex-start!important}
+#offerRibbon{top:12px;left:50%;width:min(94%,760px);z-index:1000}
+@media(max-width:600px){#offerSection .offer-card{grid-template-columns:1fr!important}#offerSection .offer-image{height:190px!important;min-height:190px!important}#offerSection .offer-card-body{padding:16px!important}#offerSection .offer-card-body .offer-order{width:100%!important;min-width:0!important;align-self:stretch!important}}
