@@ -25,6 +25,7 @@ const integer = (v, min=0, max=100000000) => { const n=Number(v); if(!Number.isS
 function validImage(value){const image=String(value||'');if(!image)return '';if(image.length>5000000||!/^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(image))throw new Error('সঠিক ছবি দিন (PNG/JPG/WebP, সর্বোচ্চ প্রায় 3.5MB)।');return image;}
 async function initDb(){
  await pool.query(`
+ CREATE TABLE IF NOT EXISTS categories (id BIGSERIAL PRIMARY KEY, name TEXT UNIQUE NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
  CREATE TABLE IF NOT EXISTS products (
  id BIGSERIAL PRIMARY KEY, name TEXT NOT NULL, category TEXT NOT NULL,
  price INTEGER NOT NULL CHECK(price >= 0), old_price INTEGER NOT NULL DEFAULT 0 CHECK(old_price >= 0),
@@ -41,6 +42,7 @@ async function initDb(){
  CREATE TABLE IF NOT EXISTS admins (id BIGSERIAL PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL);
  CREATE TABLE IF NOT EXISTS offers (id BIGSERIAL PRIMARY KEY, text TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), product_id BIGINT, image TEXT NOT NULL DEFAULT '', price INTEGER NOT NULL DEFAULT 0, old_price INTEGER NOT NULL DEFAULT 0, description TEXT NOT NULL DEFAULT '');
  `);
+ await pool.query("INSERT INTO categories(name) SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND BTRIM(category)<>'' ON CONFLICT(name) DO NOTHING").catch(()=>{});
  const count=Number((await pool.query('SELECT COUNT(*) AS n FROM products')).rows[0].n);
  if(!count){
   const seed=[
@@ -91,6 +93,8 @@ app.get('/api/orders/status',async(req,res)=>{try{const phone=text(req.query.pho
 app.post('/api/admin/login',loginLimiter,async(req,res)=>{try{const username=text(req.body.username,100),password=String(req.body.password||'');const r=await pool.query('SELECT id,password_hash FROM admins WHERE username=$1',[username]);const admin=r.rows[0];if(!admin||!bcrypt.compareSync(password,admin.password_hash))return res.status(401).json({error:'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়।'});req.session.regenerate(err=>{if(err)return res.status(500).json({error:'লগইন করা যায়নি।'});req.session.adminId=admin.id;res.json({message:'লগইন সফল।'});});}catch(e){res.status(500).json({error:'লগইন করা যায়নি।'})}});
 app.post('/api/admin/logout',(req,res)=>req.session.destroy(()=>res.json({message:'লগআউট হয়েছে।'})));
 app.get('/api/admin/me',requireAdmin,(req,res)=>res.json({loggedIn:true}));
+app.get('/api/admin/categories',requireAdmin,async(req,res)=>{try{res.json((await pool.query('SELECT id,name FROM categories ORDER BY name ASC')).rows)}catch(e){res.status(500).json({error:'ক্যাটাগরি লোড করা যায়নি।'})}});
+app.post('/api/admin/categories',requireAdmin,async(req,res)=>{try{const name=text(req.body.name,50);if(name.length<2)return res.status(400).json({error:'ক্যাটাগরির নাম কমপক্ষে ২ অক্ষরের দিন।'});const r=await pool.query('INSERT INTO categories(name) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING id,name',[name]);const row=r.rows[0]||(await pool.query('SELECT id,name FROM categories WHERE name=$1',[name])).rows[0];res.status(201).json({message:'ক্যাটাগরি সংরক্ষণ হয়েছে।',category:row})}catch(e){res.status(400).json({error:'ক্যাটাগরি যোগ করা যায়নি।'})}});
 app.get('/api/admin/products',requireAdmin,async(req,res)=>{try{res.json((await pool.query('SELECT * FROM products ORDER BY id DESC')).rows)}catch(e){res.status(500).json({error:'প্রোডাক্ট লোড করা যায়নি।'})}});
 app.get('/api/admin/offers',requireAdmin,async(req,res)=>{try{res.json((await pool.query('SELECT * FROM offers ORDER BY id DESC')).rows)}catch(e){res.status(500).json({error:'অফার লোড করা যায়নি।'})}});
 app.post('/api/admin/offers',requireAdmin,async(req,res)=>{try{const value=text(req.body.text,500),productId=req.body.productId?integer(req.body.productId,1):null,image=validImage(req.body.image),price=integer(req.body.price||0),oldPrice=integer(req.body.oldPrice||0),description=text(req.body.description,300);if(!value)return res.status(400).json({error:'অফারের নাম/লেখা দিন।'});if(productId&&!(await pool.query('SELECT id FROM products WHERE id=$1',[productId])).rowCount)return res.status(400).json({error:'সঠিক প্রোডাক্ট নির্বাচন করুন।'});const r=await pool.query('INSERT INTO offers(text,active,product_id,image,price,old_price,description) VALUES($1,1,$2,$3,$4,$5,$6) RETURNING id',[value,productId,image,price,oldPrice,description]);res.status(201).json({id:r.rows[0].id,message:'অফার যোগ হয়েছে।'})}catch(e){res.status(400).json({error:e.message||'অফার যোগ করা যায়নি।'})}});
