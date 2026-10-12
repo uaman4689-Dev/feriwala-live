@@ -28,3 +28,9 @@
 #offerSection .offer-chip span{flex-shrink:0;color:#234f36;font-size:11px;font-weight:800}
 #offerSection .offer-chip:hover{background:#f3d38b;border-color:#d9b75c}
 @media(max-width:600px){#offerSection .offer-strip{padding:9px;gap:7px}#offerSection .offer-chip{font-size:12px;padding:8px 10px;align-items:flex-start}#offerSection .offer-chip span{font-size:10px}}
+
+/* Compact Track Parcel shortcut in the header */
+.track-header{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;padding:7px 10px;border:1px solid var(--line);border-radius:22px;background:#fff;color:var(--green);font-size:12px;font-weight:800;white-space:nowrap;transition:background .18s,border-color .18s}
+.track-header:hover{background:#f2f7ef;border-color:var(--green)}
+.track-header-icon{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#eef5e9;font-size:14px}
+@media(max-width:600px){.header{gap:8px;flex-wrap:wrap}.header .brand{margin-right:auto}.track-header{order:2;padding:5px 8px;font-size:11px}.track-header-icon{width:20px;height:20px;font-size:12px}.header #cartOpen{order:3;padding:7px 9px}.header .search{order:4;flex-basis:100%;max-width:none}}
