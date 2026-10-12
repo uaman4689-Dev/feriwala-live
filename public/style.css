@@ -35,6 +35,3 @@
 .track-header-icon{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#eef5e9;font-size:14px}
 @media(max-width:600px){.header{gap:8px;flex-wrap:wrap}.header .brand{margin-right:auto}.track-header{order:2;padding:5px 8px;font-size:11px}.track-header-icon{width:20px;height:20px;font-size:12px}.header #cartOpen{order:3;padding:7px 9px}.header .search{order:4;flex-basis:100%;max-width:none}}
 
-/* Keep floating bag/contact fixed at the middle-right while scrolling */
-.floating-actions{position:fixed!important;right:16px!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;z-index:999!important;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-@media(max-width:480px){.floating-actions{right:10px!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important}}
