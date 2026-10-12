@@ -71,6 +71,7 @@ async function initDb(){
  }
 }
 app.disable('x-powered-by');
+app.set('trust proxy', 1); // Render runs behind a proxy; allow secure session cookies.
 app.use(helmet({contentSecurityPolicy:false}));
 app.use(express.json({limit:'6mb'}));
 app.use(express.urlencoded({extended:false,limit:'100kb'}));
