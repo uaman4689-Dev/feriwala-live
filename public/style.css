@@ -19,3 +19,12 @@
 #offerSection .offer-card-body .offer-order{display:block!important;width:auto!important;min-width:200px;max-width:100%!important;margin-top:16px!important;align-self:flex-start!important}
 #offerRibbon{top:12px;left:50%;width:min(94%,760px);z-index:1000}
 @media(max-width:600px){#offerSection .offer-card{grid-template-columns:1fr!important}#offerSection .offer-image{height:190px!important;min-height:190px!important}#offerSection .offer-card-body{padding:16px!important}#offerSection .offer-card-body .offer-order{width:100%!important;min-width:0!important;align-self:stretch!important}}
+
+/* One long offers box containing every active offer */
+#offerSection{margin:18px 0 28px;scroll-margin-top:85px}
+#offerSection .section-head{margin:0 0 10px}
+#offerSection .offer-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;padding:12px;border:1px solid #e5d29a;border-radius:12px;background:linear-gradient(100deg,#fff8e5,#fffdf8);box-shadow:0 3px 12px #00000008}
+#offerSection .offer-chip{display:inline-flex;align-items:center;gap:8px;max-width:100%;border:1px solid #ead9a8;border-radius:24px;padding:9px 13px;background:#fff;color:#263823;font-size:13px;font-weight:700;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+#offerSection .offer-chip span{flex-shrink:0;color:#234f36;font-size:11px;font-weight:800}
+#offerSection .offer-chip:hover{background:#f3d38b;border-color:#d9b75c}
+@media(max-width:600px){#offerSection .offer-strip{padding:9px;gap:7px}#offerSection .offer-chip{font-size:12px;padding:8px 10px;align-items:flex-start}#offerSection .offer-chip span{font-size:10px}}
