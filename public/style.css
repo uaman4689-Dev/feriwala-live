@@ -291,3 +291,10 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .track-review-action p{margin:0;color:#3e6047;font-size:13px;line-height:1.6}
 .track-review-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:800;white-space:nowrap}
 @media(max-width:560px){.track-review-action{align-items:stretch;flex-direction:column;gap:9px}.track-review-btn{width:100%}}
+
+/* Rotating best-selling search suggestions */
+.header .search{position:relative;transition:border-color .18s,box-shadow .18s}
+.header .search:focus-within{border-color:#76a782;box-shadow:0 0 0 3px rgba(70,130,85,.10)}
+.header .search input::placeholder{color:#738778;opacity:1;transition:color .2s}
+.header .search:focus-within input::placeholder{color:#9aa69b}
+@media(prefers-reduced-motion:reduce){.header .search,.header .search input::placeholder{transition:none}}
