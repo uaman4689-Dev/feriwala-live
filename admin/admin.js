@@ -45,9 +45,11 @@ setInterval(pollOrders,12000);
 $('#refreshOrders').onclick=loadOrders;init();
 
 function printMonthlyBill(data,title){
- const s=data.summary||{},fmt=n=>'৳'+Number(n||0).toLocaleString('en-BD'),profit=Number(s.costUnrecordedOrders||0)>0?'ক্রয়মূল্য অসম্পূর্ণ':fmt(s.grossProfitAfterCommission||0);
- const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const doc='<!doctype html><html lang="bn"><meta charset="utf-8"><title>'+safe(title)+'</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#193326}h1,h2,p{text-align:center}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0}.card{border:1px solid #d9e4db;border-radius:12px;padding:20px;text-align:center}.card strong{display:block;font-size:24px;margin-top:12px;color:#21583a}@media(max-width:600px){.cards{grid-template-columns:1fr}}@media print{body{padding:0}}</style><body><h1>Feriwala</h1><h2>ক্রয়মূল্য ও লাভের হিসাব</h2><p>সময়কাল: '+safe(data.month||s.month||'')+'</p><div class="cards"><div class="card">মোট লাভ<strong>'+profit+'</strong></div><div class="card">রিসেলারদের মোট পাওনা<strong>'+fmt(s.resellerPayable)+'</strong></div><div class="card">পাইকারি বিক্রির মোট টাকা<strong>'+fmt(s.wholesaleSales)+'</strong></div></div><script>window.onload=()=>setTimeout(()=>window.print(),250)<\\/script></body></html>';
+ const s=data.summary||{},fmt=n=>'৳'+Number(n||0).toLocaleString('en-BD'),safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const profit=Number(s.costUnrecordedOrders||0)>0?'ক্রয়মূল্য অসম্পূর্ণ':fmt(s.grossProfitAfterCommission||0);
+ const stats=[['মোট লাভ',profit],['মোট বিক্রি',fmt(s.totalSales)],['পণ্য বিক্রি',fmt(s.productSales)],['পণ্য ক্রয়মূল্য',fmt(s.deliveredPurchaseCost)],['রিসেলার কমিশন',fmt(s.resellerCommissionTotal)],['রিসেলারদের পাওনা',fmt(s.resellerPayable)],['পাইকারি বিক্রি',fmt(s.wholesaleSales)],['ডেলিভারি আদায়',fmt(s.deliveryTotal)],['মেম্বার ছাড়',fmt(s.memberDiscountTotal)],['ডেলিভারি সম্পন্ন',Number(s.delivered||0)],['বাতিল অর্ডার',Number(s.cancelled||0)],['ক্রয়মূল্য নেই এমন ডেলিভারি',Number(s.costUnrecordedOrders||0)]];
+ const resellerRows=(s.resellers||[]).map(r=>'<tr><td>'+safe(r.username)+'</td><td>'+Number(r.orders||0)+'</td><td>'+fmt(r.sales)+'</td><td>'+fmt(r.commission)+'</td><td>'+Number(r.delivered||0)+'</td><td>'+Number(r.cancelled||0)+'</td></tr>').join('');
+ const doc='<!doctype html><html lang="bn"><meta charset="utf-8"><title>'+safe(title)+'</title><style>body{font-family:Arial,sans-serif;padding:26px;color:#193326}h1,h2,h3,p{text-align:center}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0}.card{border:1px solid #d9e4db;border-radius:10px;padding:14px}.card strong{display:block;font-size:20px;margin-top:8px;color:#21583a}table{border-collapse:collapse;width:100%;margin-top:16px}th,td{border:1px solid #cdd8cf;padding:8px;text-align:left;font-size:11px}th{background:#f1f6f1}@media print{body{padding:0}}</style><body><h1>Feriwala</h1><h2>মাসিক বিক্রয় ও লাভের বিস্তারিত রিপোর্ট</h2><p>সময়কাল: '+safe(data.month||s.month||'')+'</p><div class="cards">'+stats.map(x=>'<div class="card">'+safe(x[0])+'<strong>'+safe(x[1])+'</strong></div>').join('')+'</div><h3>রিসেলারভিত্তিক বিক্রয় ও কমিশন</h3><table><thead><tr><th>রিসেলার</th><th>অর্ডার</th><th>বিক্রি</th><th>কমিশন</th><th>ডেলিভারি</th><th>বাতিল</th></tr></thead><tbody>'+resellerRows+'</tbody></table><p>রিপোর্টটি Feriwala-এর সংরক্ষিত অর্ডার ও কমিশন তথ্য থেকে তৈরি। ক্রয়মূল্য অসম্পূর্ণ থাকলে লাভ নির্ভুল নাও হতে পারে।</p><script>window.onload=()=>setTimeout(()=>window.print(),250)<\\/script></body></html>';
  const w=window.open('','_blank');if(!w){msg('প্রিন্ট করতে browser popup allow করুন।',true);return}w.document.open();w.document.write(doc);w.document.close();
 }
 async function loadMonthlyReports(){
@@ -55,21 +57,30 @@ async function loadMonthlyReports(){
   const d=await api('/api/admin/monthly-reports'),rows=d.reports||[],sel=$('#monthlyMonthSelect');
   sel.innerHTML='<option value="current">চলতি মাস ('+esc(d.current.month)+')</option>'+rows.map(r=>'<option value="'+esc(r.month)+'">'+esc(r.month)+'</option>').join('');
   function renderSummary(month,s){
-   const profitText=Number(s.costUnrecordedOrders||0)>0?'—':money(s.grossProfitAfterCommission||0);
-   $('#currentMonthSummary').innerHTML=`
-    <div class="monthly-summary-head">
-      <div><span class="monthly-period-label">SELECTED PERIOD</span><h3>${esc(month==='চলতি মাস'?'চলতি মাস':month)}</h3></div>
-      <div class="monthly-export-actions"><button class="monthly-pdf" id="currentPdf" type="button">প্রিন্ট / PDF</button></div>
-    </div>
-    <div class="business-total-grid">
-      <article class="business-total-card"><small>মোট লাভ</small><strong>${profitText}</strong></article>
-      <article class="business-total-card"><small>রিসেলারদের মোট পাওনা</small><strong>${money(s.resellerPayable||0)}</strong></article>
-      <article class="business-total-card"><small>পাইকারি বিক্রির মোট টাকা</small><strong>${money(s.wholesaleSales||0)}</strong></article>
-    </div>`;
-   $('#currentPdf').onclick=async()=>{try{printMonthlyBill(await api('/api/admin/monthly-report/'+(month==='চলতি মাস'?'current':month)),month+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}};
+   const profitText=Number(s.costUnrecordedOrders||0)>0?'ক্রয়মূল্য অসম্পূর্ণ':money(s.grossProfitAfterCommission||0);
+   const cards=[
+    ['💰','মোট লাভ',profitText,Number(s.costUnrecordedOrders||0)>0?'কিছু অর্ডারের ক্রয়মূল্য নেই':'ক্রয়মূল্য অনুযায়ী'],
+    ['🧾','মোট বিক্রি',money(s.totalSales||0),'বাতিল অর্ডার বাদে'],
+    ['🛍️','পণ্য বিক্রি',money(s.productSales||0),'পণ্যের সাবটোটাল'],
+    ['📦','পণ্য ক্রয়মূল্য',money(s.deliveredPurchaseCost||0),'যেসব ডেলিভারির ক্রয়মূল্য জানা'],
+    ['🤝','রিসেলার কমিশন',money(s.resellerCommissionTotal||0),'বাতিল নয় এমন অর্ডার'],
+    ['💳','রিসেলারদের মোট পাওনা',money(s.resellerPayable||0),'এখনও পরিশোধ হয়নি'],
+    ['🏪','পাইকারি বিক্রির মোট টাকা',money(s.wholesaleSales||0),'বাতিল পাইকারি অর্ডার বাদে'],
+    ['🚚','ডেলিভারি ফি',money(s.deliveryTotal||0),'কাস্টমারদের ডেলিভারি চার্জ'],
+    ['🏷️','মেম্বার ছাড়',money(s.memberDiscountTotal||0),'মোট ডিসকাউন্ট'],
+    ['✅','ডেলিভারি সম্পন্ন',Number(s.delivered||0),'অর্ডার সংখ্যা'],
+    ['❌','বাতিল অর্ডার',Number(s.cancelled||0),'অর্ডার সংখ্যা'],
+    ['⚠️','ক্রয়মূল্য অসম্পূর্ণ',Number(s.costUnrecordedOrders||0),'লাভ যাচাই করতে ক্রয়মূল্য দিন']
+   ];
+   const resellerRows=(s.resellers||[]).map(r=>'<tr><td>'+esc(r.username||'রিসেলার')+'</td><td>'+Number(r.orders||0)+'</td><td>'+money(r.sales||0)+'</td><td>'+money(r.commission||0)+'</td><td>'+Number(r.delivered||0)+'</td><td>'+Number(r.cancelled||0)+'</td></tr>').join('');
+   $('#currentMonthSummary').innerHTML='<div class="monthly-summary-head"><div><span class="monthly-period-label">FERIWALA BUSINESS REPORT</span><h3>'+esc(month==='চলতি মাস'?'চলতি মাস':month)+'</h3><p>বিক্রি, ক্রয়মূল্য, কমিশন ও লাভের পূর্ণ হিসাব</p></div><div class="monthly-export-actions"><button class="monthly-pdf" id="currentPdf" type="button">প্রিন্ট / PDF</button></div></div><div class="business-total-grid"><article class="business-total-card"><small>মোট লাভ</small><strong>'+profitText+'</strong></article><article class="business-total-card"><small>রিসেলারদের মোট পাওনা</small><strong>'+money(s.resellerPayable||0)+'</strong></article><article class="business-total-card"><small>পাইকারি বিক্রির মোট টাকা</small><strong>'+money(s.wholesaleSales||0)+'</strong></article></div><div class="monthly-kpis">'+cards.map(x=>'<article class="monthly-kpi"><span class="monthly-kpi-icon">'+x[0]+'</span><small>'+x[1]+'</small><strong>'+x[2]+'</strong><em>'+x[3]+'</em></article>').join('')+'</div><div class="monthly-history-head"><div><h3>রিসেলারভিত্তিক বিক্রয় ও কমিশন</h3><p>এই মাসে প্রত্যেক রিসেলারের বিক্রি ও কমিশনের হিসাব</p></div></div><div class="tablewrap monthly-table">'+(resellerRows?'<table><thead><tr><th>রিসেলার</th><th>অর্ডার</th><th>বিক্রি</th><th>কমিশন</th><th>ডেলিভারি</th><th>বাতিল</th></tr></thead><tbody>'+resellerRows+'</tbody></table>':'এই মাসে রিসেলার বিক্রির তথ্য নেই।')+'</div>';
+   $('#currentPdf').onclick=async()=>{try{const report=month==='চলতি মাস'?await api('/api/admin/monthly-report/current'):await api('/api/admin/monthly-report/'+encodeURIComponent(month));printMonthlyBill(report,month+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}};
   }
   renderSummary('চলতি মাস',d.current.summary);
   sel.onchange=async()=>{try{if(sel.value==='current'){renderSummary('চলতি মাস',d.current.summary);return}const report=await api('/api/admin/monthly-report/'+encodeURIComponent(sel.value));renderSummary(sel.value,report.summary)}catch(e){msg(e.message,true)}};
+  $('#monthlyReports').innerHTML=rows.length?'<table><thead><tr><th>মাস</th><th>মোট বিক্রি</th><th>মোট লাভ</th><th>রিসেলার পাওনা</th><th>পাইকারি বিক্রি</th><th>রিপোর্ট</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+esc(r.month)+'</td><td>'+money(r.summary.totalSales||0)+'</td><td>'+(Number(r.summary.costUnrecordedOrders||0)>0?'অসম্পূর্ণ':money(r.summary.grossProfitAfterCommission||0))+'</td><td>'+money(r.summary.resellerPayable||0)+'</td><td>'+money(r.summary.wholesaleSales||0)+'</td><td><button class="smallbtn" data-month-open="'+esc(r.month)+'">বিস্তারিত</button> <button class="smallbtn" data-month-print="'+esc(r.month)+'">প্রিন্ট</button></td></tr>').join('')+'</tbody></table>':'এখনো কোনো পুরোনো মাসের রিপোর্ট নেই।';
+  document.querySelectorAll('[data-month-open]').forEach(b=>b.onclick=()=>{sel.value=b.dataset.monthOpen;sel.dispatchEvent(new Event('change'));window.scrollTo({top:$('#monthlyTab').offsetTop,behavior:'smooth'})});
+  document.querySelectorAll('[data-month-print]').forEach(b=>b.onclick=async()=>{try{const report=await api('/api/admin/monthly-report/'+encodeURIComponent(b.dataset.monthPrint));printMonthlyBill(report,b.dataset.monthPrint+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}});
  }catch(e){$('#monthlyReports').textContent=e.message;$('#currentMonthSummary').textContent=e.message}
 }
 $('#refreshMonthly')?.addEventListener('click',loadMonthlyReports);
