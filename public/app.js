@@ -45,7 +45,7 @@ function renderOffers(){
 }
 function offerOrder(id){const o=offers.find(x=>Number(x.id)===Number(id));if(o?.productId&&products.some(p=>Number(p.id)===Number(o.productId))){buyNow(Number(o.productId));return}$('#products').scrollIntoView({behavior:'smooth',block:'start'});toast('অফারের পণ্য বেছে “এখনই কিনুন” চাপুন।')}
 
-/* Persistent footer counters. */ 
+/* Footer counters: replay from zero each time the counters enter view. */
 async function initStoreStats(){
  try{
   if(!sessionStorage.getItem('feriwala-visit-counted')){
@@ -53,8 +53,27 @@ async function initStoreStats(){
    sessionStorage.setItem('feriwala-visit-counted','1');
   }
   const stats=await api('/api/stats');
-  animateCounter($('#visitorCount'),Number(stats.visitors)||0);
-  animateCounter($('#orderCount'),Number(stats.orders)||0);
+  const visitorTotal=Number(stats.visitors)||0;
+  const orderTotal=Number(stats.orders)||0;
+  const visitorEl=$('#visitorCount'),orderEl=$('#orderCount');
+  if(!visitorEl||!orderEl)return;
+  visitorEl.textContent='০';orderEl.textContent='০';
+  const statsBox=$('#storeStats');
+  if(!statsBox){animateCounter(visitorEl,visitorTotal);animateCounter(orderEl,orderTotal);return;}
+  let visible=false;
+  const observer=new IntersectionObserver(entries=>{
+   for(const entry of entries){
+    if(entry.isIntersecting&&!visible){
+     visible=true;
+     visitorEl.textContent='০';orderEl.textContent='০';
+     animateCounter(visitorEl,visitorTotal);animateCounter(orderEl,orderTotal);
+    }else if(!entry.isIntersecting&&visible){
+     visible=false;
+     visitorEl.textContent='০';orderEl.textContent='০';
+    }
+   }
+  },{threshold:0.35});
+  observer.observe(statsBox);
  }catch(e){}
 }
 function openProductPage(id){
