@@ -78,3 +78,16 @@
 .stat-circle>*{position:relative;z-index:1}
 @keyframes statSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.stat-circle:after{animation:none}}
+
+
+/* Centered counters with a continuous loading-style rotating ring */
+.store-stats{width:100%;display:flex;justify-content:center;align-items:center;gap:clamp(24px,6vw,70px);margin:28px auto 22px;padding:12px}
+.stat-circle{width:clamp(136px,19vw,176px);height:clamp(136px,19vw,176px);position:relative;isolation:isolate;overflow:hidden;flex-shrink:0;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;background:#f0f7ed;border:1px solid #c4d9bd;box-shadow:0 8px 24px #234f3618;color:#234f36}
+.stat-circle:before{content:"";position:absolute;inset:7px;border:1px solid #c8dbc3;border-radius:50%;pointer-events:none}
+.stat-circle:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0deg,transparent 245deg,#2f7549 290deg,#9ecf91 330deg,transparent 360deg);mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));animation:feriwalaRing 1.5s linear infinite;pointer-events:none}
+.stat-circle:nth-child(2){background:#fff8e5;border-color:#e7d69f;color:#775719}
+.stat-circle:nth-child(2):after{background:conic-gradient(from 0deg,transparent 0deg,transparent 245deg,#b48a26 290deg,#f2d991 330deg,transparent 360deg)}
+.stat-icon{font-size:23px;line-height:1}.stat-label{font-size:13px;font-weight:700}.stat-number{font-size:clamp(26px,4vw,35px);font-weight:900;line-height:1.1;font-variant-numeric:tabular-nums}
+@keyframes feriwalaRing{to{transform:rotate(360deg)}}
+@media(max-width:420px){.store-stats{gap:15px}.stat-circle{width:128px;height:128px}.stat-number{font-size:25px}.stat-label{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.stat-circle:after{animation:none}}
