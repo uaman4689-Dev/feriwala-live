@@ -80,3 +80,15 @@ function animateCounter(el,target){
 
 document.addEventListener('mousemove',e=>{const frame=e.target.closest('#productZoom');if(!frame)return;const img=frame.querySelector('img');if(!img)return;const r=frame.getBoundingClientRect();const x=((e.clientX-r.left)/r.width)*100;const y=((e.clientY-r.top)/r.height)*100;img.style.transformOrigin=x+'% '+y+'%';img.classList.add('zoom-follow')});
 document.addEventListener('mouseleave',e=>{const frame=e.target.closest?.('#productZoom');if(!frame)return;const img=frame.querySelector('img');if(img){img.style.transformOrigin='center center';img.classList.remove('zoom-follow')}},true);
+
+/* Floating return-to-top arrow */
+(function setupBackToTop(){
+ if(document.getElementById('backToTop'))return;
+ const btn=document.createElement('button');
+ btn.id='backToTop';btn.type='button';btn.setAttribute('aria-label','হোমে ফিরে যান');btn.title='উপরে / হোমে যান';btn.textContent='↑';
+ document.body.appendChild(btn);
+ const update=()=>btn.classList.toggle('is-visible',window.scrollY>320);
+ window.addEventListener('scroll',update,{passive:true});
+ btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+ update();
+})();
