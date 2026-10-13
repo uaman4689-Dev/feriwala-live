@@ -91,3 +91,12 @@
 @keyframes feriwalaRing{to{transform:rotate(360deg)}}
 @media(max-width:420px){.store-stats{gap:15px}.stat-circle{width:128px;height:128px}.stat-number{font-size:25px}.stat-label{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.stat-circle:after{animation:none}}
+
+/* Compact, centered visitor/order counters */
+#storeStats.store-stats{display:flex!important;justify-content:center!important;align-items:center!important;gap:22px!important;margin:18px auto 14px!important;padding:6px!important}
+#storeStats .stat-circle{width:104px!important;height:104px!important;min-width:104px!important;gap:4px!important;box-shadow:0 3px 12px #234f3612!important}
+#storeStats .stat-circle:before{inset:5px!important}
+#storeStats .stat-icon{font-size:17px!important}
+#storeStats .stat-label{font-size:10px!important}
+#storeStats .stat-number{font-size:23px!important}
+@media(max-width:420px){#storeStats.store-stats{gap:14px!important}#storeStats .stat-circle{width:92px!important;height:92px!important;min-width:92px!important}#storeStats .stat-number{font-size:21px!important}}
