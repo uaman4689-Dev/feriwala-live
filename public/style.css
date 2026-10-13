@@ -142,3 +142,6 @@ footer #storeStats{grid-column:1/-1!important;width:100%!important;justify-conte
 #backToTop.is-visible{opacity:1;visibility:visible;transform:translateY(0)}
 #backToTop:hover{background:#174b2f}
 @media(max-width:600px){#backToTop{right:12px;bottom:16px;width:40px;height:40px}}
+
+/* Keep counter ring animation; remove only the inner icon images */
+#storeStats .stat-icon{display:none!important}
