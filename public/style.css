@@ -298,3 +298,23 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .header .search input::placeholder{color:#738778;opacity:1;transition:color .2s}
 .header .search:focus-within input::placeholder{color:#9aa69b}
 @media(prefers-reduced-motion:reduce){.header .search,.header .search input::placeholder{transition:none}}
+
+/* Smart, responsive footer and social links */
+footer{background:linear-gradient(145deg,#f4f8f3,#fffdf8 60%,#edf5ee);border-top:1px solid #dfe9df;padding:34px clamp(16px,4vw,44px) 18px;border-radius:22px 22px 0 0}
+footer>div,footer>section,footer>.copyright{max-width:1180px;margin-left:auto;margin-right:auto}
+footer .footer-extra{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:20px 0;border-top:1px solid #e2eae1;border-bottom:1px solid #e2eae1;margin-top:20px}
+footer .footer-links,footer .footer-payments{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+footer .footer-links>b,footer .footer-payments>b,footer .social-footer>b{font-size:14px;color:#214b31;font-weight:850}
+footer .footer-links>a:not(.footer-reseller-link){font-size:12px;color:#617266;text-decoration:none}
+footer .footer-links>a:not(.footer-reseller-link):hover{color:#20543a;text-decoration:underline}
+footer .payment-chips{display:flex;flex-wrap:wrap;gap:7px}footer .payment-chips span{padding:7px 10px;border:1px solid #e0e9df;border-radius:9px;background:#fff;color:#5e6e60;font-size:11px;font-weight:700}
+footer .footer-payments>small{color:#839084;font-size:11px;line-height:1.6}
+footer .social-footer{margin-top:0;padding:22px 0 15px;border-top:0}footer .social-footer p{margin:7px 0 14px;color:#6c7c6e;font-size:12px}
+footer .social-actions{display:flex;flex-wrap:wrap;gap:10px}
+footer .social-actions .social-link{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border-radius:999px;border:1px solid #dce8dc;background:#fff;color:#294d34;text-decoration:none;font-size:12px;font-weight:800;box-shadow:0 4px 12px #1d4a2810;transition:transform .18s,box-shadow .18s}
+footer .social-actions .social-link:hover{transform:translateY(-2px);box-shadow:0 8px 18px #1d4a2818}footer .social-actions .social-link[hidden]{display:none}
+footer .social-icon{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#20543a;color:white;font-size:18px;font-weight:900;line-height:1}
+footer .social-facebook .social-icon{background:#1877f2}footer .social-whatsapp .social-icon{background:#20b866}footer .social-messenger .social-icon{background:#0866ff}
+footer .footer-policy{padding:12px 0;border-top:1px solid #e6ece5}footer .footer-policy h3{font-size:13px;color:#35543c;margin:0 0 5px}footer .footer-policy p{font-size:11px;line-height:1.7;color:#7a867b;margin:0}
+footer .copyright{text-align:center;padding-top:17px;margin-top:12px;border-top:1px solid #e0e8df;color:#788579;font-size:11px}
+@media(max-width:650px){footer{padding:25px 16px 15px;border-radius:18px 18px 0 0}footer .footer-extra{grid-template-columns:1fr;gap:20px}footer .social-actions .social-link{flex:1 1 130px;justify-content:center}}
