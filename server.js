@@ -46,6 +46,8 @@ async function initDb(){
  ALTER TABLE orders ADD COLUMN IF NOT EXISTS referral_code TEXT;
  ALTER TABLE orders ADD COLUMN IF NOT EXISTS commission_processed BOOLEAN NOT NULL DEFAULT FALSE;
  CREATE TABLE IF NOT EXISTS offers (id BIGSERIAL PRIMARY KEY, text TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), product_id BIGINT, image TEXT NOT NULL DEFAULT '', price INTEGER NOT NULL DEFAULT 0, old_price INTEGER NOT NULL DEFAULT 0, description TEXT NOT NULL DEFAULT '');
+  CREATE TABLE IF NOT EXISTS store_stats (key TEXT PRIMARY KEY, value BIGINT NOT NULL DEFAULT 0);
+  INSERT INTO store_stats(key,value) VALUES('visitors',0) ON CONFLICT(key) DO NOTHING;
  `);
  await pool.query("INSERT INTO categories(name) SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND BTRIM(category)<>'' ON CONFLICT(name) DO NOTHING").catch(()=>{});
  const count=Number((await pool.query('SELECT COUNT(*) AS n FROM products')).rows[0].n);
@@ -81,6 +83,8 @@ const requireAdmin=(req,res,next)=>req.session&&req.session.adminId?next():res.s
 const requireReseller=(req,res,next)=>req.session&&req.session.resellerId?next():res.status(401).json({error:'রিসেলার লগইন করুন।'});
 const referralCode=v=>text(v,40).toUpperCase().replace(/[^A-Z0-9_-]/g,'');
 app.get('/api/store',(req,res)=>res.json({name:process.env.STORE_NAME||'Feriwala',whatsapp:process.env.WHATSAPP_NUMBER||'',messenger:process.env.FACEBOOK_MESSENGER_URL||''}));
+app.post('/api/stats/visit',async(req,res)=>{try{await pool.query("UPDATE store_stats SET value=value+1 WHERE key='visitors'");res.json({ok:true});}catch(e){res.status(500).json({error:'ভিজিটর হিসাব আপডেট করা যায়নি।'});}});
+app.get('/api/stats',async(req,res)=>{try{const v=await pool.query("SELECT value FROM store_stats WHERE key='visitors'");const o=await pool.query("SELECT COUNT(*)::int AS total FROM orders WHERE status <> 'Cancelled'");res.json({visitors:Number(v.rows[0]?.value||0),orders:Number(o.rows[0]?.total||0)});}catch(e){res.status(500).json({error:'স্ট্যাটস লোড করা যায়নি।'});}});
 app.get('/api/offers',async(req,res)=>{try{const r=await pool.query('SELECT id,text,product_id AS "productId",image,price,old_price AS "oldPrice",description FROM offers WHERE active=1 ORDER BY id DESC');res.json(r.rows)}catch(e){res.status(500).json({error:'অফার লোড করা যায়নি।'})}});
 app.get('/api/products',async(req,res)=>{try{const r=await pool.query('SELECT id,name,category,price,old_price AS "oldPrice",emoji,label,description,stock,image FROM products WHERE active=1 ORDER BY id DESC');res.json(r.rows)}catch(e){res.status(500).json({error:'প্রোডাক্ট লোড করা যায়নি।'})}});
 app.post('/api/orders',async(req,res)=>{
