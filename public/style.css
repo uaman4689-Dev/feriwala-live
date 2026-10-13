@@ -161,3 +161,15 @@ footer .footer-policy{margin-top:12px!important;padding:13px 15px!important;back
 footer .footer-policy h3{font-size:13px!important;font-weight:800!important;color:var(--ink)!important;margin:0 0 6px!important}
 footer .footer-policy p{font-size:11px!important;line-height:1.85!important;color:var(--muted)!important;margin:0!important}
 @media(max-width:600px){footer .footer-extra{grid-template-columns:1fr!important;gap:18px!important}footer .footer-policy{padding:12px!important}}
+
+
+/* Verified final counter ring and footer policy styling */
+#storeStats .stat-circle{background:transparent!important;box-shadow:none!important}
+#storeStats .stat-label,#storeStats .stat-number{display:block!important;background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important;border:0!important;outline:0!important;border-radius:0!important;padding:0!important;margin:0!important}
+#storeStats .stat-label{font-size:7px!important;line-height:1.1!important;font-weight:600!important;color:inherit!important}
+#storeStats .stat-circle:after{content:""!important;display:block!important;position:absolute!important;inset:-3px!important;border-radius:50%!important;background:conic-gradient(from 0deg,transparent 0deg,transparent 235deg,#2f7549 285deg,#d3e6cd 330deg,transparent 360deg)!important;mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))!important;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))!important;animation:statSpin 2.1s linear infinite!important;pointer-events:none!important;z-index:0!important}
+#storeStats .stat-circle:nth-child(2):after{background:conic-gradient(from 0deg,transparent 0deg,transparent 235deg,#b48a26 285deg,#f2d991 330deg,transparent 360deg)!important}
+#storeStats .stat-circle>*{position:relative;z-index:1}
+footer .footer-policy{scroll-margin-top:24px}
+footer .footer-policy h3{letter-spacing:.1px}
+@media(prefers-reduced-motion:reduce){#storeStats .stat-circle:after{animation:none!important}}
