@@ -285,3 +285,9 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .reseller-header:hover{transform:translateY(-1px);box-shadow:0 7px 17px rgba(32,84,58,.2);background:#19452f}
 @media(max-width:760px){.header .reseller-header{order:3;padding:7px 9px;font-size:11px}.header .member-header{order:2}.header .track-header{order:1}.header #cartOpen{order:4}}
 @media(max-width:460px){.header .reseller-header{padding:6px 7px;font-size:10px;gap:3px}.header .member-header{padding:6px 7px;font-size:10px}.header .track-header{padding:6px 7px;font-size:10px}.header #cartOpen{font-size:11px;padding:7px 8px}}
+
+/* Review CTA attached to delivered order tracking cards */
+.track-review-action{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:14px;padding:13px 14px;border:1px solid #dce9dd;border-radius:13px;background:linear-gradient(120deg,#f2f8f2,#fff)}
+.track-review-action p{margin:0;color:#3e6047;font-size:13px;line-height:1.6}
+.track-review-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:800;white-space:nowrap}
+@media(max-width:560px){.track-review-action{align-items:stretch;flex-direction:column;gap:9px}.track-review-btn{width:100%}}
