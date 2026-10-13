@@ -279,3 +279,9 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .header .member-header:hover{background:#edf6ee;border-color:var(--green)}
 @media(max-width:760px){.header .member-header{order:3;padding:7px 9px;font-size:11px}.header .track-header{order:2}.header #cartOpen{order:4}}
 @media(max-width:460px){.header{gap:7px}.header .brand{flex:1 1 auto;min-width:125px}.header .search{order:5;flex:1 0 100%;width:100%}.header .track-header,.header .member-header{padding:6px 8px;font-size:10px}.header .track-header-icon{width:18px;height:18px}.header #cartOpen{font-size:11px;padding:7px 8px}}
+
+/* Reseller login shortcut beside member login in the main header */
+.reseller-header{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;white-space:nowrap;padding:8px 11px;border:1px solid #dce8dd;border-radius:22px;background:linear-gradient(135deg,#20543a,#2d6945);color:#fff;font-size:12px;font-weight:800;line-height:1.2;text-decoration:none;box-shadow:0 4px 12px rgba(32,84,58,.13);transition:transform .16s,box-shadow .16s}
+.reseller-header:hover{transform:translateY(-1px);box-shadow:0 7px 17px rgba(32,84,58,.2);background:#19452f}
+@media(max-width:760px){.header .reseller-header{order:3;padding:7px 9px;font-size:11px}.header .member-header{order:2}.header .track-header{order:1}.header #cartOpen{order:4}}
+@media(max-width:460px){.header .reseller-header{padding:6px 7px;font-size:10px;gap:3px}.header .member-header{padding:6px 7px;font-size:10px}.header .track-header{padding:6px 7px;font-size:10px}.header #cartOpen{font-size:11px;padding:7px 8px}}
