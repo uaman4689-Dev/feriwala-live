@@ -57,3 +57,15 @@
 .product-detail-info>p{line-height:1.8}
 .detail-buy{width:100%;padding:15px;margin-top:12px}
 @media(max-width:650px){.product-detail-grid{grid-template-columns:1fr}.product-detail-picture{min-height:230px;max-height:42vh}.product-detail-picture img{max-height:42vh}.product-detail-emoji{font-size:100px;padding:28px}.product-detail-info h1{font-size:28px}.product-detail-price{font-size:24px}}
+
+
+/* Centered animated circular visitor/order statistics */
+.store-stats{width:100%;display:flex;justify-content:center;align-items:center;gap:clamp(22px,6vw,72px);margin:28px auto 22px;padding:10px 12px}
+.stat-circle{width:clamp(132px,19vw,176px);height:clamp(132px,19vw,176px);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;position:relative;flex-shrink:0;background:radial-gradient(circle at 35% 25%,#ffffff 0%,#f2f7ef 55%,#e1eddf 100%);border:2px solid #b8cfb3;box-shadow:0 8px 22px #234f3618,inset 0 0 0 6px #ffffffb8;color:var(--green);animation:statPop .65s ease-out both}
+.stat-circle:before{content:"";position:absolute;inset:7px;border:1px dashed #9eb99a;border-radius:50%;pointer-events:none}
+.stat-circle:nth-child(2){background:radial-gradient(circle at 35% 25%,#fffefa 0%,#fff6df 58%,#f8e5ad 100%);border-color:#dfc16d;color:#725318;animation-delay:.12s}
+.stat-circle:nth-child(2):before{border-color:#d6bd76}
+.stat-icon{font-size:22px;line-height:1.1}.stat-label{font-size:13px;font-weight:700}.stat-number{font-size:clamp(25px,4vw,34px);line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:.5px}.stat-caption{font-size:10px;color:var(--muted)}
+@keyframes statPop{from{opacity:.3;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
+@media(max-width:420px){.store-stats{gap:16px}.stat-circle{width:128px;height:128px}.stat-label{font-size:12px}.stat-number{font-size:25px}.stat-caption{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.stat-circle{animation:none}}
