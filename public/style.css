@@ -319,7 +319,10 @@ footer .footer-policy{padding:12px 0;border-top:1px solid #e6ece5}footer .footer
 footer .copyright{text-align:center;padding-top:17px;margin-top:12px;border-top:1px solid #e0e8df;color:#788579;font-size:11px}
 @media(max-width:650px){footer{padding:25px 16px 15px;border-radius:18px 18px 0 0}footer .footer-extra{grid-template-columns:1fr;gap:20px}footer .social-actions .social-link{flex:1 1 130px;justify-content:center}}
 
-/* Highlight wholesale shop link in the home navigation */
-.nav a.wholesale-nav-link{background:#e8f5eb;color:#176336;font-weight:800;border:1px solid #b8dfc3;border-radius:999px;padding:9px 15px;white-space:nowrap;box-shadow:0 2px 7px rgba(23,99,54,.08)}
-.nav a.wholesale-nav-link:hover,.nav a.wholesale-nav-link:focus-visible{background:#176336;color:#fff;border-color:#176336;outline-offset:3px}
-@media(max-width:680px){.nav a.wholesale-nav-link{display:inline-flex;align-items:center;padding:9px 13px}}
+/* Wholesale button beside the homepage search box */
+.search-wholesale{display:flex;align-items:center;gap:10px;flex:1;min-width:0;max-width:610px}
+.search-wholesale .search{flex:1;min-width:0;max-width:none}
+.wholesale-header-link{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex-shrink:0;white-space:nowrap;padding:11px 14px;border:1px solid #b8dfc3;border-radius:999px;background:#e8f5eb;color:#176336;font-size:13px;font-weight:800;box-shadow:0 2px 7px rgba(23,99,54,.08);transition:background .18s,color .18s}
+.wholesale-header-link:hover,.wholesale-header-link:focus-visible{background:#176336;color:#fff;border-color:#176336;outline-offset:3px}
+@media(max-width:800px){.header .search-wholesale{order:3;flex:1 0 100%;width:100%;max-width:none}.search-wholesale .search{max-width:none}.wholesale-header-link{padding:10px 12px;font-size:12px}}
+@media(max-width:460px){.header .search-wholesale{order:5;gap:7px}.wholesale-header-link{padding:10px 9px;font-size:11px}.search-wholesale .search input{padding-right:8px;font-size:12px}}
