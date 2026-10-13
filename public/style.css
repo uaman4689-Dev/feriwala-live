@@ -106,3 +106,22 @@
 #storeStats .stat-icon{font-size:17px!important}#storeStats .stat-label{font-size:10px!important}#storeStats .stat-number{font-size:23px!important}
 @media(max-width:420px){#storeStats.store-stats{gap:14px!important}#storeStats .stat-circle{width:92px!important;height:92px!important;min-width:92px!important}#storeStats .stat-number{font-size:21px!important}}
 
+
+/* Product details: mouse-follow zoom and horizontally scrollable related products */
+#productZoom{cursor:zoom-in;position:relative}
+#productZoom img{transition:transform .18s ease;transform:scale(1);will-change:transform}
+#productZoom img.zoom-follow{transform:scale(2)}
+.detail-add{width:100%;margin-top:10px}
+.detail-buy{width:100%;margin-top:9px}
+.related-products{max-width:1100px;margin:34px auto 18px;padding-bottom:22px}
+.related-grid{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(145px,190px);gap:14px;overflow-x:auto;padding:4px 2px 16px;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain}
+.related-card{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;scroll-snap-align:start;min-width:0}
+.related-open{display:flex;flex-direction:column;align-items:stretch;gap:8px;width:100%;padding:10px;border:0;background:transparent;color:var(--ink);text-align:left}
+.related-open img{width:100%;height:125px;object-fit:cover;border-radius:9px;background:var(--cream)}
+.related-emoji{height:125px;display:grid;place-items:center;background:var(--cream);font-size:45px;border-radius:9px}
+.related-name{font-size:13px;font-weight:700;line-height:1.4;min-height:36px}
+.related-open strong{color:var(--green);font-size:15px}
+.related-add{margin:0 10px 10px;width:calc(100% - 20px);border:1px solid var(--green);border-radius:9px;padding:8px;background:transparent;color:var(--green);font-weight:700}
+.related-add:disabled{opacity:.45}
+@media(max-width:650px){.related-grid{grid-auto-columns:145px}#productZoom img.zoom-follow{transform:scale(1.35)}}
+@media(hover:none){#productZoom{cursor:default}#productZoom img.zoom-follow{transform:scale(1)}}
