@@ -59,30 +59,17 @@ async function loadMonthlyReports(){
       <div><span class="monthly-period-label">SELECTED PERIOD</span><h3>${esc(month==='চলতি মাস'?'চলতি মাস':month)}</h3><p>এই সময়ের বিক্রি ও ব্যবসার সারাংশ</p></div>
       <div class="monthly-export-actions"><button class="monthly-pdf" id="currentPdf" type="button"><span aria-hidden="true">⇩</span> PDF বিল</button><a class="monthly-csv" href="/api/admin/monthly-report/${encodeURIComponent(month==='চলতি মাস'?'current':month)}/excel.csv"><span aria-hidden="true">▦</span> Excel / CSV</a></div>
     </div>
-    <div class="monthly-kpis">
-      <article class="monthly-kpi"><span class="monthly-kpi-icon">▣</span><small>মোট অর্ডার</small><strong>${Number(s.orderCount||0)}</strong><em>নির্বাচিত মাস</em></article>
-      <article class="monthly-kpi"><span class="monthly-kpi-icon">৳</span><small>মোট বিক্রি</small><strong>${money(s.totalSales||0)}</strong><em>মোট অর্ডার মূল্য</em></article>
-      <article class="monthly-kpi"><span class="monthly-kpi-icon">%</span><small>মেম্বার ছাড়</small><strong>${money(s.memberDiscountTotal||0)}</strong><em>ডিসকাউন্টের হিসাব</em></article>
-      <article class="monthly-kpi"><span class="monthly-kpi-icon">↗</span><small>রিসেলার কমিশন</small><strong>${money(s.resellerCommissionTotal||0)}</strong><em>কমিশন খরচ</em></article>
-      <article class="monthly-kpi"><span class="monthly-kpi-icon">✓</span><small>ডেলিভারি সম্পন্ন</small><strong>${Number(s.delivered||0)}</strong><em>Delivered অর্ডার</em></article>
-      <article class="monthly-kpi monthly-kpi-muted"><span class="monthly-kpi-icon">−</span><small>বাতিল অর্ডার</small><strong>${Number(s.cancelled||0)}</strong><em>Cancelled অর্ডার</em></article>
+    <div class="business-total-grid">
+      <article class="business-total-card"><small>মোট লাভ</small><strong>${s.grossProfitAfterCommission===undefined?'—':money(s.grossProfitAfterCommission)}</strong></article>
+      <article class="business-total-card"><small>রিসেলারদের মোট পাওনা</small><strong>${money(s.resellerPayable||0)}</strong></article>
+      <article class="business-total-card"><small>পাইকারি বিক্রির মোট টাকা</small><strong>${money(s.wholesaleSales||0)}</strong></article>
     </div>
-    <section class="profit-dashboard monthly-profit-dashboard">
-      <div class="profit-heading"><div><span class="eyebrow">BUSINESS INSIGHTS</span><h3>ক্রয়মূল্য ও লাভের হিসাব</h3><p>অর্ডারের স্ট্যাটাস Delivered হলে রিপোর্টে হিসাব আপডেট হবে।</p></div><div class="profit-heading-actions"><button type="button" class="smallbtn" id="reconcileCostsBtn">ক্রয়মূল্য পুনরায় মিলান</button><span class="live-pill"><i></i> রিপোর্ট সারাংশ</span></div></div>
-      <div class="profit-grid">
-        <article class="profit-card profit-main"><span>কমিশন বাদে সম্ভাব্য গ্রস লাভ</span><strong>${s.grossProfitAfterCommission===undefined?'—':money(s.grossProfitAfterCommission)}</strong><small>ক্রয়মূল্য ও রিসেলার কমিশন বাদে</small></article>
-        <article class="profit-card"><span>ডেলিভারি অর্ডারের মোট ক্রয়মূল্য</span><strong>${s.deliveredPurchaseCost===undefined?'—':money(s.deliveredPurchaseCost)}</strong><small>ক্রয়মূল্য রেকর্ড থাকা অর্ডার</small></article>
-        <article class="profit-card"><span>ক্রয়মূল্য রেকর্ড আছে</span><strong>${Number(s.costRecordedOrders||0)} <em>অর্ডার</em></strong><small>হিসাব সম্পূর্ণ</small></article>
-        <article class="profit-card profit-warning"><span>ক্রয়মূল্য অসম্পূর্ণ</span><strong>${Number(s.costUnrecordedOrders===undefined?Number(s.delivered||0):s.costUnrecordedOrders)} <em>অর্ডার</em></strong><small>ক্রয়মূল্য যোগ করলে হিসাব আরও নির্ভুল হবে</small></article>
-      </div><p class="profit-note">গ্রস লাভে কুরিয়ার ও অন্যান্য পরিচালন খরচ বাদ নেই। ক্রয়মূল্য না থাকলে লাভ অনুমান করে দেখানো হয় না।</p>
-    </section>`;
-   const profitTitle=document.querySelector('.monthly-profit-dashboard .profit-heading h3');if(profitTitle){const full=profitTitle.textContent;profitTitle.setAttribute('aria-label',full);profitTitle.textContent='';let i=0;const typeNext=()=>{if(i<full.length){profitTitle.textContent+=full[i++];setTimeout(typeNext,95)}};typeNext();}
    const reconcileBtn=$('#reconcileCostsBtn');if(reconcileBtn&&!reconcileBtn.dataset.bound){reconcileBtn.dataset.bound='1';reconcileBtn.onclick=async()=>{if(!confirm('যেসব Delivered অর্ডারে ক্রয়মূল্য নেই, সেগুলো বর্তমান প্রোডাক্টের ক্রয়মূল্য দিয়ে পুনরায় মিলিয়ে দেখব। এগোবেন?'))return;reconcileBtn.disabled=true;reconcileBtn.textContent='হিসাব মিলানো হচ্ছে…';try{const result=await api('/api/admin/monthly-report/reconcile-costs',{method:'POST',body:JSON.stringify({})});msg(result.message+' অর্ডার: '+result.repairedOrders+', পণ্য: '+result.repairedItems);await loadMonthlyReports();}catch(e){msg(e.message,true)}finally{reconcileBtn.disabled=false;reconcileBtn.textContent='ক্রয়মূল্য পুনরায় মিলান'}}}
    $('#currentPdf').onclick=async()=>{try{printMonthlyBill(await api('/api/admin/monthly-report/'+(month==='চলতি মাস'?'current':month)),month+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}};
   }
   renderSummary('চলতি মাস',d.current.summary);
   sel.onchange=async()=>{try{if(sel.value==='current'){renderSummary('চলতি মাস',d.current.summary);return}const report=await api('/api/admin/monthly-report/'+encodeURIComponent(sel.value));renderSummary(sel.value,report.summary)}catch(e){msg(e.message,true)}};
-  $('#monthlyReports').innerHTML=rows.length?'<table><thead><tr><th>মাস</th><th>অর্ডার</th><th>মোট বিক্রি</th><th>মেম্বার ছাড়</th><th>রিসেলার কমিশন</th><th>ডেলিভারি</th><th>বাতিল</th><th>ডাউনলোড</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+esc(r.month)+'</td><td>'+Number(r.summary.orderCount||0)+'</td><td>'+money(r.summary.totalSales||0)+'</td><td>'+money(r.summary.memberDiscountTotal||0)+'</td><td>'+money(r.summary.resellerCommissionTotal||0)+'</td><td>'+Number(r.summary.delivered||0)+'</td><td>'+Number(r.summary.cancelled||0)+'</td><td><div class="actions"><button class="smallbtn" data-month-pdf="'+esc(r.month)+'">PDF বিল</button><a class="smallbtn" href="/api/admin/monthly-report/'+encodeURIComponent(r.month)+'/excel.csv">Excel/CSV</a></div></td></tr>').join('')+'</tbody></table>':'এখনো কোনো পুরোনো মাসের রিপোর্ট নেই।';
+  $('#monthlyReports').innerHTML=rows.length?'<table><thead><tr><th>মাস</th><th>মোট লাভ</th><th>রিসেলারদের পাওনা</th><th>পাইকারি বিক্রি</th><th>প্রিন্ট</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+esc(r.month)+'</td><td>'+money(r.summary.grossProfitAfterCommission||0)+'</td><td>'+money(r.summary.resellerPayable||0)+'</td><td>'+money(r.summary.wholesaleSales||0)+'</td><td><button class="smallbtn" data-month-pdf="'+esc(r.month)+'">প্রিন্ট</button></td></tr>').join('')+'</tbody></table>':'এখনো কোনো পুরোনো মাসের রিপোর্ট নেই।';
   document.querySelectorAll('[data-month-pdf]').forEach(b=>b.onclick=async()=>{try{printMonthlyBill(await api('/api/admin/monthly-report/'+b.dataset.month),b.dataset.month+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}});
  }catch(e){$('#monthlyReports').textContent=e.message;$('#currentMonthSummary').textContent=e.message}
 }
