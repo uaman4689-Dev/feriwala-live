@@ -241,3 +241,35 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .member-checkout-note{font-size:12px;color:var(--muted);line-height:1.6;margin:6px 0 12px}
 .member-checkout-note button{border:0;background:none;color:var(--green);font-weight:800;text-decoration:underline;padding:0}
 @media(max-width:600px){.review-form{grid-template-columns:1fr}.review-form label,.review-form .review-help,.review-form button,.review-form #reviewMessage{grid-column:1}.customer-reviews{margin-top:28px}}
+
+/* Feriwala Member Area UI Refresh */
+.member-nav{display:inline-flex;align-items:center;gap:7px;border:1px solid #dce8dd;background:linear-gradient(135deg,#fff,#f3f8f3);border-radius:999px;padding:10px 15px;color:#20543a;font-weight:800;box-shadow:0 4px 14px rgba(28,70,41,.06);transition:transform .18s,box-shadow .18s}
+.member-nav:hover{background:#edf6ee;box-shadow:0 7px 18px rgba(28,70,41,.1);transform:translateY(-1px)}
+.member-overlay{background:rgba(10,28,17,.68);backdrop-filter:blur(8px);padding:clamp(10px,3vw,28px)}
+.member-panel{width:min(100%,680px);max-height:min(92vh,900px);overflow:auto;border:1px solid #ffffffa8;border-radius:26px;padding:clamp(20px,4vw,34px);background:linear-gradient(180deg,#f6fbf6 0,#fff 190px);box-shadow:0 32px 100px rgba(0,0,0,.28);scrollbar-width:thin}
+.member-panel:before{content:"FERIWALA MEMBER CLUB";display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;background:#e6f2e7;color:#20543a;font-size:10px;font-weight:900;letter-spacing:1.5px;margin-bottom:17px}
+.member-panel h2{font-size:clamp(23px,4vw,30px);letter-spacing:-.7px;line-height:1.3;color:#1d4c32}
+.member-panel>p,.member-subtitle{font-size:13px;line-height:1.8}
+.member-close{right:15px;top:15px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid #e1e9e2;font-size:25px;box-shadow:0 4px 14px #17351c0b}
+.member-close:hover{background:#edf5ed;color:#20543a}
+.member-tabs{gap:6px;padding:5px;background:#edf3ed;border:1px solid #e3ebe4;border-radius:14px;margin:19px 0}
+.member-tabs button{padding:12px;border-radius:10px;font-size:13px;transition:background .15s,color .15s}
+.member-tabs button.active{background:#20543a;color:#fff;box-shadow:0 5px 13px #20543a22}
+.member-panel label{font-size:12px;color:#3b4d40;margin:14px 0;font-weight:750}
+.member-panel input{padding:13px 14px;border-radius:12px;border-color:#dce6dd;background:#fff;transition:border-color .16s,box-shadow .16s}
+.member-panel input:focus{border-color:#62966c;box-shadow:0 0 0 4px #e8f4e9}
+.member-submit,.member-profile-form .primary{border-radius:12px;padding:13px 16px;font-size:14px;box-shadow:0 8px 18px #20543a22}
+.member-note{padding:11px 12px;border-radius:10px;background:#f5f8f5;border:1px solid #e9eee9}
+.member-profile-form{padding:15px;border:1px solid #e5ece5;background:#fbfdfb;border-radius:16px}
+.member-orders-head{margin-top:19px;padding-top:20px;border-color:#e5ece5}
+.member-orders-head h3{font-size:18px;letter-spacing:-.3px}
+.member-orders-head button{font-size:12px;font-weight:750;border-radius:9px;padding:9px 12px}
+.member-order-stats{gap:10px;margin:15px 0}
+.member-order-stats span{padding:14px;border:1px solid #dfebdf;background:linear-gradient(135deg,#f0f7f0,#fff);border-radius:13px;color:#657468;line-height:1.5}
+.member-order-stats b{font-size:23px;color:#20543a}
+.member-order{border-color:#e2ebe3;border-radius:14px;padding:15px;background:linear-gradient(135deg,#fff,#fbfdfb);box-shadow:0 4px 15px #193d2408;transition:border-color .15s,transform .15s}
+.member-order:hover{border-color:#b8d1bc;transform:translateY(-1px)}
+.member-order>div{align-items:flex-start;flex-wrap:wrap}
+.member-order-status{background:#e8f4e9;border:1px solid #d8e9d9;color:#245b39;font-weight:750}
+.member-logout{border-radius:12px;font-weight:750;padding:12px;border-color:#efd4d4;background:#fff8f8}
+@media(max-width:600px){.member-panel{border-radius:20px;padding:22px 16px}.member-order-stats{grid-template-columns:1fr 1fr}.member-orders-head{align-items:flex-start}.member-panel h2{font-size:23px}}
