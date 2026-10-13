@@ -87,3 +87,10 @@ header>a:last-child{font-size:13px;font-weight:750;padding:9px 13px;border:1px s
 .monthly-table table{min-width:760px}.monthly-table th{background:#f3f7f3;color:#637368;font-size:11px;padding:14px}.monthly-table td{padding:13px 14px;font-size:12px}.monthly-table tbody tr:hover{background:#f8fbf8}
 @media(max-width:800px){.monthly-profit-dashboard .profit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.monthly-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.monthly-pagehead{align-items:flex-start;flex-direction:column}.monthly-toolbar{align-items:flex-start;flex-direction:column}.monthly-panel .month-picker-label{width:100%;grid-template-columns:34px minmax(90px,1fr)}.monthly-panel .month-picker-label select{grid-column:1/-1}.monthly-secure{align-self:flex-end}.monthly-summary-head{align-items:flex-start;flex-direction:column}.monthly-export-actions{width:100%}.monthly-pdf,.monthly-csv{flex:1}.monthly-kpis{gap:8px}.monthly-kpi{padding:12px}.monthly-kpi strong{font-size:19px}.monthly-profit-dashboard .profit-grid{grid-template-columns:1fr 1fr}.monthly-history-head h3{font-size:17px}}
+
+/* Three requested accounting totals */
+.business-total-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0 6px}
+.business-total-card{padding:22px;border:1px solid #dfe8df;border-radius:16px;background:#fff;box-shadow:0 5px 18px rgba(22,60,35,.04);display:flex;flex-direction:column;gap:12px;min-width:0}
+.business-total-card small{color:#607265;font-size:13px;font-weight:750}
+.business-total-card strong{font-size:clamp(22px,2.5vw,32px);color:#1f5535;overflow-wrap:anywhere;line-height:1.25}
+@media(max-width:650px){.business-total-grid{grid-template-columns:1fr;gap:10px}.business-total-card{padding:17px}.business-total-card strong{font-size:25px}}
