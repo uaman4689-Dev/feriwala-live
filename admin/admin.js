@@ -57,7 +57,7 @@ async function loadMonthlyReports(){
       <article class="monthly-kpi monthly-kpi-muted"><span class="monthly-kpi-icon">−</span><small>বাতিল অর্ডার</small><strong>${Number(s.cancelled||0)}</strong><em>Cancelled অর্ডার</em></article>
     </div>
     <section class="profit-dashboard monthly-profit-dashboard">
-      <div class="profit-heading"><div><span class="eyebrow">BUSINESS INSIGHTS</span><h3>ক্রয়মূল্য ও লাভের হিসাব</h3><p>অর্ডারের স্ট্যাটাস Delivered হলে রিপোর্টে হিসাব আপডেট হবে।</p></div><span class="live-pill"><i></i> রিপোর্ট সারাংশ</span></div>
+      <div class="profit-heading"><div><span class="eyebrow">BUSINESS INSIGHTS</span><h3>ক্রয়মূল্য ও লাভের হিসাব</h3><p>অর্ডারের স্ট্যাটাস Delivered হলে রিপোর্টে হিসাব আপডেট হবে।</p></div><div class="profit-heading-actions"><button type="button" class="smallbtn" id="reconcileCostsBtn">ক্রয়মূল্য পুনরায় মিলান</button><span class="live-pill"><i></i> রিপোর্ট সারাংশ</span></div></div>
       <div class="profit-grid">
         <article class="profit-card profit-main"><span>কমিশন বাদে সম্ভাব্য গ্রস লাভ</span><strong>${s.grossProfitAfterCommission===undefined?'—':money(s.grossProfitAfterCommission)}</strong><small>ক্রয়মূল্য ও রিসেলার কমিশন বাদে</small></article>
         <article class="profit-card"><span>ডেলিভারি অর্ডারের মোট ক্রয়মূল্য</span><strong>${s.deliveredPurchaseCost===undefined?'—':money(s.deliveredPurchaseCost)}</strong><small>ক্রয়মূল্য রেকর্ড থাকা অর্ডার</small></article>
@@ -66,6 +66,7 @@ async function loadMonthlyReports(){
       </div><p class="profit-note">গ্রস লাভে কুরিয়ার ও অন্যান্য পরিচালন খরচ বাদ নেই। ক্রয়মূল্য না থাকলে লাভ অনুমান করে দেখানো হয় না।</p>
     </section>`;
    const profitTitle=document.querySelector('.monthly-profit-dashboard .profit-heading h3');if(profitTitle){const full=profitTitle.textContent;profitTitle.setAttribute('aria-label',full);profitTitle.textContent='';let i=0;const typeNext=()=>{if(i<full.length){profitTitle.textContent+=full[i++];setTimeout(typeNext,95)}};typeNext();}
+   const reconcileBtn=$('#reconcileCostsBtn');if(reconcileBtn&&!reconcileBtn.dataset.bound){reconcileBtn.dataset.bound='1';reconcileBtn.onclick=async()=>{if(!confirm('যেসব Delivered অর্ডারে ক্রয়মূল্য নেই, সেগুলো বর্তমান প্রোডাক্টের ক্রয়মূল্য দিয়ে পুনরায় মিলিয়ে দেখব। এগোবেন?'))return;reconcileBtn.disabled=true;reconcileBtn.textContent='হিসাব মিলানো হচ্ছে…';try{const result=await api('/api/admin/monthly-report/reconcile-costs',{method:'POST',body:JSON.stringify({})});msg(result.message+' অর্ডার: '+result.repairedOrders+', পণ্য: '+result.repairedItems);await loadMonthlyReports();}catch(e){msg(e.message,true)}finally{reconcileBtn.disabled=false;reconcileBtn.textContent='ক্রয়মূল্য পুনরায় মিলান'}}}
    $('#currentPdf').onclick=async()=>{try{printMonthlyBill(await api('/api/admin/monthly-report/'+(month==='চলতি মাস'?'current':month)),month+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}};
   }
   renderSummary('চলতি মাস',d.current.summary);
