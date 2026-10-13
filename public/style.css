@@ -125,3 +125,6 @@
 .related-add:disabled{opacity:.45}
 @media(max-width:650px){.related-grid{grid-auto-columns:145px}#productZoom img.zoom-follow{transform:scale(1.35)}}
 @media(hover:none){#productZoom{cursor:default}#productZoom img.zoom-follow{transform:scale(1)}}
+
+/* Force stats circles to center across the full footer width */
+footer #storeStats{grid-column:1/-1!important;width:100%!important;justify-content:center!important;margin-left:auto!important;margin-right:auto!important}
