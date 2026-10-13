@@ -221,3 +221,23 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .social-actions a{display:inline-flex;padding:10px 15px;border-radius:22px;background:#eaf1e8;color:var(--green);font-weight:750;font-size:13px}
 .social-actions a[hidden]{display:none}
 @media(max-width:760px){.member-nav{font-size:12px;padding:8px 10px}.member-panel{padding:24px 18px}.nav{gap:14px}.member-overlay{padding:10px}}
+
+
+/* Customer reviews and member discount */
+.customer-reviews{margin:44px 0 28px;padding:24px 0;border-top:1px solid var(--line)}
+.review-carousel{display:flex;gap:12px;overflow-x:auto;padding:8px 2px 14px;scroll-snap-type:x mandatory}
+.review-card{flex:0 0 min(320px,82vw);border:1px solid var(--line);border-radius:14px;background:white;padding:16px;scroll-snap-align:start}
+.review-card strong{display:block;color:var(--green);font-size:14px}
+.review-card p{margin:8px 0 0;color:var(--ink);font-size:14px;line-height:1.7;overflow-wrap:anywhere}
+.review-submit-details{border:1px solid var(--line);border-radius:13px;padding:14px 16px;background:#fff}
+.review-submit-details summary{cursor:pointer;color:var(--green);font-weight:750}
+.review-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.review-form label{display:grid;gap:6px;font-size:13px;font-weight:700}
+.review-form input,.review-form textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink)}
+.review-form textarea{min-height:90px;resize:vertical}
+.review-form label:nth-child(2),.review-form .review-help,.review-form button,.review-form #reviewMessage{grid-column:1/-1}
+.review-help{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+.member-discount-line{display:flex;align-items:center;justify-content:space-between;padding:10px 0;color:var(--green);font-weight:750;border-bottom:1px dashed var(--line)}
+.member-checkout-note{font-size:12px;color:var(--muted);line-height:1.6;margin:6px 0 12px}
+.member-checkout-note button{border:0;background:none;color:var(--green);font-weight:800;text-decoration:underline;padding:0}
+@media(max-width:600px){.review-form{grid-template-columns:1fr}.review-form label,.review-form .review-help,.review-form button,.review-form #reviewMessage{grid-column:1}.customer-reviews{margin-top:28px}}
