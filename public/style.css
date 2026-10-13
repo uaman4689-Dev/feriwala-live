@@ -69,3 +69,12 @@
 @keyframes statPop{from{opacity:.3;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
 @media(max-width:420px){.store-stats{gap:16px}.stat-circle{width:128px;height:128px}.stat-label{font-size:12px}.stat-number{font-size:25px}.stat-caption{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.stat-circle{animation:none}}
+
+
+/* Continuous loading-style circular counter animation */
+.stat-circle{isolation:isolate;overflow:hidden}
+.stat-circle:after{content:"";position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0deg,transparent 235deg,#2f7549 285deg,#d3e6cd 330deg,transparent 360deg);mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));animation:statSpin 2.1s linear infinite;pointer-events:none;z-index:0}
+.stat-circle:nth-child(2):after{background:conic-gradient(from 0deg,transparent 0deg,transparent 235deg,#b48a26 285deg,#f2d991 330deg,transparent 360deg)}
+.stat-circle>*{position:relative;z-index:1}
+@keyframes statSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.stat-circle:after{animation:none}}
