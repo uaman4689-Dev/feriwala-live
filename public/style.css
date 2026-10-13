@@ -273,3 +273,9 @@ footer .footer-reseller-arrow{margin-left:4px!important;color:#246b43!important;
 .member-order-status{background:#e8f4e9;border:1px solid #d8e9d9;color:#245b39;font-weight:750}
 .member-logout{border-radius:12px;font-weight:750;padding:12px;border-color:#efd4d4;background:#fff8f8}
 @media(max-width:600px){.member-panel{border-radius:20px;padding:22px 16px}.member-order-stats{grid-template-columns:1fr 1fr}.member-orders-head{align-items:flex-start}.member-panel h2{font-size:23px}}
+
+/* Keep member login directly beside Track Parcel in the main header */
+.header .member-header{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;white-space:nowrap;padding:8px 11px;border-radius:22px;font-size:12px;line-height:1.2}
+.header .member-header:hover{background:#edf6ee;border-color:var(--green)}
+@media(max-width:760px){.header .member-header{order:3;padding:7px 9px;font-size:11px}.header .track-header{order:2}.header #cartOpen{order:4}}
+@media(max-width:460px){.header{gap:7px}.header .brand{flex:1 1 auto;min-width:125px}.header .search{order:5;flex:1 0 100%;width:100%}.header .track-header,.header .member-header{padding:6px 8px;font-size:10px}.header .track-header-icon{width:18px;height:18px}.header #cartOpen{font-size:11px;padding:7px 8px}}
