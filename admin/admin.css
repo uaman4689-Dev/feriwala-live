@@ -17,3 +17,30 @@
 
 /* Selected reseller removal action */
 .reseller-actions{display:flex;flex-wrap:wrap;gap:6px;min-width:160px}.danger-btn{border-color:#e7c4c4!important;color:#a83232!important;background:#fff7f7!important}.danger-btn:hover:not(:disabled){background:#a83232!important;color:#fff!important}.danger-btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* Feriwala Admin UI Refresh — responsive premium dashboard */
+:root{--green:#20543a;--pale:#eaf4ec;--bg:#f3f6f3;--ink:#17271d;--muted:#68776d;--line:#e0e8e1;--red:#b53d42;--shadow:0 12px 32px rgba(23,48,31,.055)}
+body{background:radial-gradient(ellipse at 12% 0%,#e7f2e8 0,transparent 35%),#f4f7f4;color:var(--ink);font-family:Inter,"Noto Sans Bengali",system-ui,sans-serif;letter-spacing:-.1px}
+.shell{max-width:1440px;padding:26px clamp(14px,3vw,38px) 42px}
+header{border:1px solid #e0e8e1;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);padding:15px 19px;border-radius:17px;box-shadow:var(--shadow)}
+.brand{letter-spacing:-1px;font-size:28px}.brand span{color:#5c7d60}.brand small{display:inline-block;margin-left:8px;padding:5px 8px;border-radius:6px;background:#edf5ed;color:#315e40;letter-spacing:1.5px}
+header>a:last-child{font-size:13px;font-weight:750;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:white}
+.dashhead{padding:22px 2px 8px}.dashhead h1{font-size:clamp(25px,3vw,34px);letter-spacing:-1px}.dashhead p{margin:0;line-height:1.7}.dashhead .outline{padding:11px 17px}
+.panel{border:1px solid #e1e9e2;border-radius:19px;padding:clamp(16px,2vw,25px);box-shadow:var(--shadow);margin:16px 0;background:rgba(255,255,255,.96)}
+.login{margin:clamp(40px,8vh,90px) auto;padding:30px;position:relative;overflow:hidden}.login:before{content:"";display:block;width:70px;height:5px;background:linear-gradient(90deg,#20543a,#9dc49c);border-radius:99px;margin-bottom:22px}.login h1{font-size:28px;letter-spacing:-.8px}.login p{line-height:1.7}
+.login input,.productform input:not([type=checkbox]),.productform select,.productform textarea{border:1px solid #dce6dd;border-radius:11px;padding:12px 13px;background:#fcfdfc;transition:border-color .18s,box-shadow .18s}
+.login input:focus,.productform input:focus,.productform select:focus,.productform textarea:focus,.month-picker-label select:focus{outline:none;border-color:#6c9b77;box-shadow:0 0 0 3px #e6f3e8}
+.primary,.outline,.smallbtn,.tab{transition:transform .16s,box-shadow .16s,background .16s,border-color .16s}
+.primary{background:linear-gradient(135deg,#20543a,#2e6a46);box-shadow:0 5px 12px #20543a20;border-radius:11px;padding:12px 17px}.primary:hover{transform:translateY(-1px);box-shadow:0 8px 18px #20543a26}
+.outline{border-radius:11px}.outline:hover,.smallbtn:hover{border-color:#9bbca0;background:#f6fbf6}
+.tabs{position:sticky;top:8px;z-index:30;padding:8px;background:#f0f5f0ef;border:1px solid #e1e9e2;border-radius:16px;backdrop-filter:blur(14px);box-shadow:0 7px 24px #193e2410;scrollbar-width:thin}
+.tab{border:1px solid transparent;background:transparent;padding:10px 14px;font-size:13px;font-weight:700;color:#536257}.tab:hover{background:white;border-color:#e1e9e2}.tab.active{background:#20543a;color:#fff;box-shadow:0 5px 12px #20543a20}
+.sectionhead{margin-bottom:18px}.sectionhead h2{font-size:21px;letter-spacing:-.5px}.sectionhead .primary{white-space:nowrap}
+.productform{background:linear-gradient(145deg,#f8fbf8,#f0f6f1);border:1px solid #e2ebe3;border-radius:15px;padding:19px}
+.productform label,.login label{font-size:13px;color:#35483a;line-height:1.45}.productform label small{color:#738076;font-weight:400}
+.tablewrap{border:1px solid #e5ece6;border-radius:13px;background:#fff}table{font-size:13px;min-width:720px}th{background:#f3f7f3;color:#536459;font-size:11px;letter-spacing:.2px}th,td{padding:13px 14px;border-bottom:1px solid #edf1ed}tbody tr:hover{background:#fbfdfb}tbody tr:last-child td{border-bottom:0}td .sub{line-height:1.55}
+.smallbtn{border-radius:8px;padding:7px 10px;font-weight:650}.badge{background:#eaf4ec;color:#27583b;font-weight:750}
+.message{z-index:40;background:#fff;border:1px solid #dce8dd;box-shadow:var(--shadow);border-radius:12px;padding:12px 16px}
+#clearDataForm{border-color:#f0d9d6;background:linear-gradient(135deg,#fffaf8,#fff)}
+#currentMonthSummary .stat{background:linear-gradient(145deg,#fff,#f8fbf8);border:1px solid #e3ece4;border-radius:14px;padding:17px}
+@media(max-width:650px){.shell{padding:12px}.panel{border-radius:15px;margin:12px 0}.dashhead{gap:10px;flex-direction:column}.dashhead .outline{align-self:flex-start}.tabs{top:4px;gap:5px;padding:6px}.tab{padding:9px 12px;font-size:12px}.sectionhead{gap:9px}.sectionhead h2{font-size:19px}.productform{padding:13px}.login{margin:32px auto;padding:23px}.profit-heading h3{font-size:19px}}
