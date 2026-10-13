@@ -27,7 +27,6 @@ async function initDb(){
  await pool.query(`
  CREATE TABLE IF NOT EXISTS categories (id BIGSERIAL PRIMARY KEY, name TEXT UNIQUE NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
  CREATE TABLE IF NOT EXISTS wholesale_products (id BIGSERIAL PRIMARY KEY, name TEXT NOT NULL, category TEXT NOT NULL DEFAULT 'পাইকারি', price INTEGER NOT NULL CHECK(price >= 0), min_qty INTEGER NOT NULL DEFAULT 1 CHECK(min_qty >= 1), stock INTEGER NOT NULL DEFAULT 0 CHECK(stock >= 0), description TEXT NOT NULL DEFAULT '', image TEXT NOT NULL DEFAULT '', active BOOLEAN NOT NULL DEFAULT TRUE, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
-  CREATE TABLE IF NOT EXISTS wholesale_orders (id BIGSERIAL PRIMARY KEY, customer_id BIGINT REFERENCES members(id) ON DELETE SET NULL, customer_name TEXT NOT NULL, phone TEXT NOT NULL, address TEXT NOT NULL, items_json TEXT NOT NULL, subtotal INTEGER NOT NULL, delivery_fee INTEGER NOT NULL, total INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'New', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
   CREATE TABLE IF NOT EXISTS products (
  id BIGSERIAL PRIMARY KEY, name TEXT NOT NULL, category TEXT NOT NULL,
  price INTEGER NOT NULL CHECK(price >= 0), old_price INTEGER NOT NULL DEFAULT 0 CHECK(old_price >= 0),
@@ -42,6 +41,7 @@ async function initDb(){
  delivery_zone TEXT NOT NULL DEFAULT 'inside', delivery_fee INTEGER NOT NULL DEFAULT 70
  );
  CREATE TABLE IF NOT EXISTS members (id BIGSERIAL PRIMARY KEY, name TEXT NOT NULL, login_id TEXT UNIQUE NOT NULL, phone TEXT NOT NULL DEFAULT '', email TEXT NOT NULL DEFAULT '', password_hash TEXT NOT NULL, address TEXT NOT NULL DEFAULT '', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+   CREATE TABLE IF NOT EXISTS wholesale_orders (id BIGSERIAL PRIMARY KEY, customer_id BIGINT REFERENCES members(id) ON DELETE SET NULL, customer_name TEXT NOT NULL, phone TEXT NOT NULL, address TEXT NOT NULL, items_json TEXT NOT NULL, subtotal INTEGER NOT NULL, delivery_fee INTEGER NOT NULL, total INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'New', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
  CREATE TABLE IF NOT EXISTS admins (id BIGSERIAL PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL);
  CREATE TABLE IF NOT EXISTS resellers (id BIGSERIAL PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, referral_code TEXT UNIQUE NOT NULL, active BOOLEAN NOT NULL DEFAULT TRUE, normal_type TEXT NOT NULL DEFAULT 'percent' CHECK(normal_type IN ('percent','fixed')), normal_value NUMERIC(10,2) NOT NULL DEFAULT 10 CHECK(normal_value >= 0), offer_type TEXT NOT NULL DEFAULT 'fixed' CHECK(offer_type IN ('percent','fixed')), offer_value NUMERIC(10,2) NOT NULL DEFAULT 20 CHECK(offer_value >= 0), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
  CREATE TABLE IF NOT EXISTS reseller_commissions (id BIGSERIAL PRIMARY KEY, reseller_id BIGINT NOT NULL REFERENCES resellers(id), order_id BIGINT NOT NULL REFERENCES orders(id), amount NUMERIC(12,2) NOT NULL CHECK(amount >= 0), status TEXT NOT NULL DEFAULT 'payable' CHECK(status IN ('payable','paid','reversed')), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), paid_at TIMESTAMPTZ, UNIQUE(reseller_id, order_id));
