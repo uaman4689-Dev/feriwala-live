@@ -145,3 +145,19 @@ footer #storeStats{grid-column:1/-1!important;width:100%!important;justify-conte
 
 /* Keep counter ring animation; remove only the inner icon images */
 #storeStats .stat-icon{display:none!important}
+
+
+/* Final fix: transparent counter text and polished policy cards v3 */
+#storeStats .stat-label,#storeStats .stat-number,#storeStats .stat-caption{background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;padding:0!important;text-shadow:none!important}
+#storeStats .stat-label{font-size:7px!important;line-height:1.1!important;font-weight:600!important}
+#storeStats .stat-circle{gap:2px!important}
+footer .footer-links,footer .footer-payments{background:transparent!important}
+footer .footer-extra{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:22px!important;margin-top:16px!important;padding:18px 0!important;border-top:1px solid #e2e9df!important;border-bottom:1px solid #e2e9df!important}
+footer .footer-links b,footer .footer-payments b{display:block!important;font-size:13px!important;font-weight:800!important;color:var(--ink)!important;margin-bottom:4px!important}
+footer .footer-links a{display:block!important;width:fit-content!important;padding:5px 0!important;font-size:12px!important;color:var(--muted)!important;text-decoration:none!important;border-bottom:1px solid transparent!important}
+footer .footer-links a:hover{color:var(--green)!important;border-bottom-color:currentColor!important}
+footer .payment-chips span{display:inline-flex!important;background:#fff!important;border:1px solid #dce6d8!important;border-radius:8px!important;padding:6px 9px!important;font-size:11px!important;font-weight:700!important}
+footer .footer-policy{margin-top:12px!important;padding:13px 15px!important;background:#f7f9f5!important;border:1px solid #e5ece1!important;border-radius:12px!important}
+footer .footer-policy h3{font-size:13px!important;font-weight:800!important;color:var(--ink)!important;margin:0 0 6px!important}
+footer .footer-policy p{font-size:11px!important;line-height:1.85!important;color:var(--muted)!important;margin:0!important}
+@media(max-width:600px){footer .footer-extra{grid-template-columns:1fr!important;gap:18px!important}footer .footer-policy{padding:12px!important}}
