@@ -53,9 +53,8 @@ async function initStoreStats(){
    sessionStorage.setItem('feriwala-visit-counted','1');
   }
   const stats=await api('/api/stats');
-  let el=$('#storeStats');
-  if(!el){el=document.createElement('div');el.id='storeStats';el.className='store-stats';const footer=$('#footer');if(footer)footer.insertBefore(el,footer.querySelector('.copyright'));}
-  el.innerHTML='<span>👀 মোট ভিজিটর: <b>'+Number(stats.visitors).toLocaleString('en-BD')+'</b></span><span>📦 মোট অর্ডার: <b>'+Number(stats.orders).toLocaleString('en-BD')+'</b></span>';
+  animateCounter($('#visitorCount'),Number(stats.visitors)||0);
+  animateCounter($('#orderCount'),Number(stats.orders)||0);
  }catch(e){}
 }
 function openProductPage(id){
@@ -69,3 +68,11 @@ function openProductPage(id){
 function closeProductPage(){const page=$('#productDetailPage');if(page){page.classList.remove('open');page.setAttribute('aria-hidden','true');}document.body.style.overflow='';}
 document.addEventListener('click',e=>{if(e.target.closest('.product-open-title')||e.target.closest('.product-art.product-open')){const card=e.target.closest('.product[data-product-id]');if(card)openProductPage(card.dataset.productId);}});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&(e.target.matches('.product-open-title')||e.target.matches('.product-art.product-open'))){e.preventDefault();const card=e.target.closest('.product[data-product-id]');if(card)openProductPage(card.dataset.productId);}});
+
+function animateCounter(el,target){
+ if(!el)return;
+ const start=performance.now(),duration=1100;
+ const fmt=n=>Math.floor(n).toLocaleString('bn-BD');
+ function frame(now){const p=Math.min(1,(now-start)/duration);const eased=1-Math.pow(1-p,3);el.textContent=fmt(target*eased);if(p<1)requestAnimationFrame(frame);}
+ requestAnimationFrame(frame);
+}
