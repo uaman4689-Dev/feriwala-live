@@ -128,3 +128,17 @@
 
 /* Force stats circles to center across the full footer width */
 footer #storeStats{grid-column:1/-1!important;width:100%!important;justify-content:center!important;margin-left:auto!important;margin-right:auto!important}
+
+/* Smaller centered visitor/order circles v2 */
+#storeStats.store-stats{display:flex!important;grid-column:1/-1!important;width:100%!important;justify-content:center!important;align-items:center!important;gap:12px!important;margin:10px auto!important;padding:4px!important}
+#storeStats .stat-circle{width:68px!important;height:68px!important;min-width:68px!important;gap:2px!important}
+#storeStats .stat-circle:before{inset:3px!important}
+#storeStats .stat-icon{font-size:12px!important}
+#storeStats .stat-label{font-size:8px!important;line-height:1.1!important}
+#storeStats .stat-number{font-size:16px!important}
+@media(max-width:420px){#storeStats.store-stats{gap:10px!important}#storeStats .stat-circle{width:64px!important;height:64px!important;min-width:64px!important}#storeStats .stat-number{font-size:15px!important}}
+/* Floating return-to-top arrow */
+#backToTop{position:fixed;right:18px;bottom:22px;z-index:99999;width:42px;height:42px;border:0;border-radius:50%;display:grid;place-items:center;background:#236b43;color:#fff;box-shadow:0 5px 18px #0003;font-size:25px;font-weight:800;line-height:1;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s}
+#backToTop.is-visible{opacity:1;visibility:visible;transform:translateY(0)}
+#backToTop:hover{background:#174b2f}
+@media(max-width:600px){#backToTop{right:12px;bottom:16px;width:40px;height:40px}}
