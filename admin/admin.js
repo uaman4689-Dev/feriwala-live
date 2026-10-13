@@ -65,6 +65,7 @@ async function loadMonthlyReports(){
         <article class="profit-card profit-warning"><span>ক্রয়মূল্য অসম্পূর্ণ</span><strong>${Number(s.costUnrecordedOrders===undefined?Number(s.delivered||0):s.costUnrecordedOrders)} <em>অর্ডার</em></strong><small>ক্রয়মূল্য যোগ করলে হিসাব আরও নির্ভুল হবে</small></article>
       </div><p class="profit-note">গ্রস লাভে কুরিয়ার ও অন্যান্য পরিচালন খরচ বাদ নেই। ক্রয়মূল্য না থাকলে লাভ অনুমান করে দেখানো হয় না।</p>
     </section>`;
+   const profitTitle=document.querySelector('.monthly-profit-dashboard .profit-heading h3');if(profitTitle){const full=profitTitle.textContent;profitTitle.setAttribute('aria-label',full);profitTitle.textContent='';let i=0;const typeNext=()=>{if(i<full.length){profitTitle.textContent+=full[i++];setTimeout(typeNext,95)}};typeNext();}
    $('#currentPdf').onclick=async()=>{try{printMonthlyBill(await api('/api/admin/monthly-report/'+(month==='চলতি মাস'?'current':month)),month+' মাসের হিসাব বিল')}catch(e){msg(e.message,true)}};
   }
   renderSummary('চলতি মাস',d.current.summary);
