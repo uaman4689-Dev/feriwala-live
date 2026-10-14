@@ -324,3 +324,46 @@ footer .copyright{text-align:center;padding-top:17px;margin-top:12px;border-top:
 .wholesale-header-link:hover,.wholesale-header-link:focus-visible{background:#176336;color:#fff;border-color:#176336;outline-offset:3px}
 @media(max-width:800px){.header .search-wholesale{order:3;flex:1 0 100%;width:100%;max-width:none}.search-wholesale .search{max-width:none}.wholesale-header-link{padding:10px 12px;font-size:12px}}
 @media(max-width:460px){.header .search-wholesale{order:5;gap:7px}.wholesale-header-link{padding:10px 9px;font-size:11px}.search-wholesale .search input{padding-right:8px;font-size:12px}}
+
+
+/* Feriwala special offers: one animated horizontal row */
+#offerSection{position:relative;margin:28px 0 38px;padding:26px 18px 22px;border:1px solid #e8dfb7;border-radius:24px;overflow:hidden;background:linear-gradient(120deg,#fffdf3 0%,#f4faf2 58%,#f7f4ff 100%);box-shadow:0 12px 34px rgba(31,74,44,.06)}
+#offerSection:before,#offerSection:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;pointer-events:none;filter:blur(2px);opacity:.36}
+#offerSection:before{top:-110px;left:-65px;background:#dceaa0}
+#offerSection:after{right:-85px;bottom:-120px;background:#bce7cc}
+#offerSection .offer-heading{position:relative;z-index:1;text-align:center;margin:0 auto 24px}
+#offerSection .offer-heading-brand{font-size:11px;letter-spacing:4px;font-weight:900;color:#16864d;margin-bottom:5px}
+#offerSection .offer-heading h2{font-size:clamp(26px,3.2vw,40px);line-height:1.15;letter-spacing:-1px;margin:0;color:#163d2b;font-weight:950}
+#offerSection .offer-heading h2 span{color:#1a9b58}
+#offerSection .offer-heading p{margin:9px 0 0;color:#345c43;font-size:14px;font-weight:700}
+#offerSection .offer-carousel-wrap{position:relative;z-index:1}
+#offerSection .offer-strip{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 36px)/3);gap:18px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 15px;scrollbar-width:none}
+#offerSection .offer-strip::-webkit-scrollbar{display:none}
+#offerSection .offer-showcase{min-width:0;display:flex;flex-direction:column;overflow:hidden;scroll-snap-align:start;border:1px solid #cde8d2;border-radius:22px;background:linear-gradient(155deg,#f2fff2,#fffef8);box-shadow:0 8px 22px rgba(26,81,48,.09);animation:feriwalaOfferEnter .65s both;animation-delay:calc(var(--offer-index,0)*.13s);transition:transform .28s,box-shadow .28s,border-color .28s}
+#offerSection .offer-showcase:hover{transform:translateY(-7px);box-shadow:0 17px 30px rgba(26,81,48,.16)}
+#offerSection .offer-showcase-combo{background:linear-gradient(150deg,#fff7ff,#f5eaff);border-color:#d9b8ff}
+#offerSection .offer-showcase-standard{background:linear-gradient(150deg,#f3f9ff,#fff);border-color:#bddcff}
+#offerSection .offer-showcase-event{background:linear-gradient(150deg,#f1fff4,#fffdf1);border-color:#a9e9b9}
+#offerSection .offer-showcase-image,#offerSection .offer-showcase-art{width:100%;height:175px;min-height:175px;object-fit:cover;display:grid;place-items:center;background:linear-gradient(135deg,#e6f6e6,#fff8da);font-size:60px}
+#offerSection .offer-showcase-content{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:17px;flex:1}
+#offerSection .offer-showcase-kicker{font-size:10px;letter-spacing:1.2px;font-weight:950;color:#21834b}
+#offerSection .offer-showcase-combo .offer-showcase-kicker{color:#873cc5}
+#offerSection .offer-showcase-standard .offer-showcase-kicker{color:#176fc1}
+#offerSection .offer-showcase-content h3{margin:0;color:#203e2c;font-size:clamp(16px,1.35vw,21px);line-height:1.25;font-weight:900}
+#offerSection .offer-showcase-content p{margin:0;color:#5c6e61;font-size:13px;line-height:1.5}
+#offerSection .offer-showcase-price{color:#a96b00;font-size:16px;font-weight:950}
+#offerSection .offer-showcase-delivery{color:#16804a;font-size:12px;font-weight:800}
+#offerSection .offer-showcase-cta{margin-top:auto;padding:11px 17px;border:0;border-radius:999px;background:linear-gradient(100deg,#087e43,#20a65b);color:#fff;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 5px 12px #16894b25;transition:transform .2s,filter .2s}
+#offerSection .offer-showcase-combo .offer-showcase-cta{background:linear-gradient(100deg,#8738c9,#c03eb5)}
+#offerSection .offer-showcase-standard .offer-showcase-cta{background:linear-gradient(100deg,#086bc5,#168fe0)}
+#offerSection .offer-showcase-cta:hover{transform:translateY(-2px) scale(1.02);filter:brightness(1.06)}
+#offerSection .offer-nav{position:absolute;top:42%;z-index:3;width:40px;height:40px;border:1px solid #e2ebe1;border-radius:50%;background:#ffffffed;color:#177c45;font-size:30px;line-height:1;box-shadow:0 4px 14px #00000010;cursor:pointer;transition:transform .2s}
+#offerSection .offer-nav:hover{transform:scale(1.08);background:#167d45;color:white}
+#offerSection .offer-prev{left:-13px}#offerSection .offer-next{right:-13px}
+#offerSection .offer-carousel-dots{display:flex;justify-content:center;gap:8px;position:relative;z-index:1;margin-top:2px}
+#offerSection .offer-carousel-dots span{width:10px;height:10px;border-radius:99px;background:#cdebd3;transition:width .25s,background .25s}
+#offerSection .offer-carousel-dots span.active{width:28px;background:#16864b}
+@keyframes feriwalaOfferEnter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:850px){#offerSection{padding:22px 14px}#offerSection .offer-strip{grid-auto-columns:calc((100% - 18px)/2)}#offerSection .offer-showcase-image,#offerSection .offer-showcase-art{height:150px;min-height:150px}}
+@media(max-width:560px){#offerSection{border-radius:18px;padding:20px 10px}#offerSection .offer-heading{margin-bottom:17px}#offerSection .offer-heading p{font-size:12px}#offerSection .offer-strip{grid-auto-columns:84%;gap:12px;padding-bottom:12px}#offerSection .offer-showcase-image,#offerSection .offer-showcase-art{height:160px;min-height:160px}#offerSection .offer-showcase-content{padding:14px}#offerSection .offer-nav{width:34px;height:34px;font-size:25px}#offerSection .offer-prev{left:-8px}#offerSection .offer-next{right:-8px}}
+@media(prefers-reduced-motion:reduce){#offerSection .offer-showcase{animation:none;transition:none}#offerSection .offer-strip{scroll-behavior:auto}}
