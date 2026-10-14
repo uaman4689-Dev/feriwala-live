@@ -1,4 +1,44 @@
 const $=s=>document.querySelector(s);let products=[],storeConfig={whatsapp:'',messenger:''},memberLoggedIn=false,activeCat='সব',cart=JSON.parse(localStorage.getItem('feriwala-cart')||'{}'),toastTimer;let referralCode=new URLSearchParams(location.search).get('ref')||sessionStorage.getItem('feriwala-ref')||'';if(referralCode){referralCode=referralCode.toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,40);sessionStorage.setItem('feriwala-ref',referralCode)}
+
+/* Customer-controlled appearance preferences */
+const appearancePalettes={
+ green:{green:'#24583b',pale:'#e7f2e8',cream:'#f7f3e8',gold:'#edce83'},
+ blue:{green:'#2456a6',pale:'#e7efff',cream:'#f3f6ff',gold:'#b8d2ff'},
+ purple:{green:'#7041a6',pale:'#f0e7fb',cream:'#faf4ff',gold:'#e0c2ff'},
+ rose:{green:'#b43f68',pale:'#fdeaf0',cream:'#fff5f7',gold:'#f7c7d5'},
+ orange:{green:'#a94c18',pale:'#fff0df',cream:'#fff8ef',gold:'#ffd5a1'}
+};
+function applyAppearance(){
+ let saved={};try{saved=JSON.parse(localStorage.getItem('feriwala-appearance')||'{}')||{}}catch(e){}
+ const palette=appearancePalettes[saved.color]||appearancePalettes.green;
+ const root=document.documentElement;
+ root.dataset.theme=saved.mode==='dark'?'dark':'light';
+ root.dataset.accent=saved.color||'green';
+ root.style.setProperty('--green',palette.green);
+ root.style.setProperty('--pale',palette.pale);
+ root.style.setProperty('--cream',palette.cream);
+ root.style.setProperty('--gold',palette.gold);
+ const toggle=document.querySelector('#darkModeToggle');
+ if(toggle)toggle.checked=saved.mode==='dark';
+ document.querySelectorAll('[data-theme-color]').forEach(b=>{b.classList.toggle('selected',b.dataset.themeColor===(saved.color||'green'));b.setAttribute('aria-pressed',String(b.dataset.themeColor===(saved.color||'green')))});
+}
+function saveAppearance(patch){
+ let old={};try{old=JSON.parse(localStorage.getItem('feriwala-appearance')||'{}')||{}}catch(e){}
+ localStorage.setItem('feriwala-appearance',JSON.stringify({...old,...patch}));
+ applyAppearance();
+}
+function initAppearance(){
+ applyAppearance();
+ const panel=$('#appearancePanel'),trigger=$('#appearanceOpen');
+ if(!panel||!trigger)return;
+ trigger.addEventListener('click',()=>{panel.hidden=!panel.hidden;trigger.setAttribute('aria-expanded',String(!panel.hidden))});
+ $('#appearanceClose').addEventListener('click',()=>{panel.hidden=true;trigger.setAttribute('aria-expanded','false')});
+ $('#darkModeToggle').addEventListener('change',e=>saveAppearance({mode:e.target.checked?'dark':'light'}));
+ panel.querySelectorAll('[data-theme-color]').forEach(b=>b.addEventListener('click',()=>saveAppearance({color:b.dataset.themeColor})));
+ $('#resetAppearance').addEventListener('click',()=>{localStorage.setItem('feriwala-appearance',JSON.stringify({mode:'light',color:'green'}));applyAppearance();toast('ডিফল্ট লুক চালু হয়েছে')});
+ document.addEventListener('click',e=>{if(!panel.hidden&&!panel.contains(e.target)&&!trigger.contains(e.target)){panel.hidden=true;trigger.setAttribute('aria-expanded','false')}});
+}
+
 const money=n=>'৳'+Number(n).toLocaleString('en-BD');
 async function api(url,opts={}){const r=await fetch(url,{headers:{'Content-Type':'application/json',...(opts.headers||{})},...opts});const d=await r.json().catch(()=>({error:'সার্ভার থেকে সঠিক উত্তর পাওয়া যায়নি।'}));if(!r.ok)throw new Error(d.error||'কাজটি করা যায়নি।');return d}
 function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
@@ -33,7 +73,7 @@ let searchHintTimer=null,searchHintIndex=0;function rotateSearchHints(){const in
 async function loadProducts(){try{products=await api('/api/products');renderCategoryFilters();renderProducts();renderOffers();startSearchHints()}catch(e){$('#products').innerHTML=`<div class="no-results">প্রোডাক্ট লোড করা যায়নি। সার্ভার চালু আছে কি না দেখুন।<br>${esc(e.message)}</div>`}}
 const statusBn={New:'নতুন অর্ডার',Confirmed:'অর্ডার নিশ্চিত হয়েছে',Processing:'প্রস্তুত করা হচ্ছে',Shipped:'পাঠানো হয়েছে',Delivered:'ডেলিভারি সম্পন্ন',Cancelled:'অর্ডার বাতিল'};
 $('#trackForm').onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target)),box=$('#trackResult');box.innerHTML='<p class="muted">আপনার অর্ডার খোঁজা হচ্ছে…</p>';try{const orders=await api('/api/orders/status?phone='+encodeURIComponent(d.phone));if(!orders.length){box.innerHTML='<p class="track-error">এই নম্বরে কোনো অর্ডার পাওয়া যায়নি। নম্বরটি ঠিক আছে কি না দেখুন।</p>';return}box.innerHTML=orders.map(result=>'<article class="track-result"><div class="track-result-head"><div><small>অর্ডার নম্বর</small><h3>#'+result.id+'</h3></div><span class="track-status status-'+esc(result.status)+'">'+esc(statusBn[result.status]||result.status)+'</span></div><p><b>নাম:</b> '+esc(result.name)+'</p><p><b>তারিখ:</b> '+esc(result.createdAt)+'</p><div class="track-items">'+result.items.map(i=>'<div>'+esc(i.name)+' × '+Number(i.qty)+'<b>'+money(i.price*i.qty)+'</b></div>').join('')+'</div><div class="track-total"><span>মোট</span><b>'+money(result.total)+'</b></div>'+(result.status==='Delivered'?'<div class="track-review-action"><p>পণ্যটি হাতে পেয়েছেন? আপনার অভিজ্ঞতা জানান।</p><button type="button" class="primary track-review-btn" data-review-order="'+result.id+'" data-review-name="'+esc(result.name)+'" data-review-phone="'+esc(d.phone)+'">⭐ এই অর্ডারের রিভিউ দিন</button></div>':'')+'</article>').join('')}catch(err){box.innerHTML='<p class="track-error">'+esc(err.message)+'</p>'}};
-$('#search').addEventListener('input',()=>{visibleProductCount=12;renderProducts()});$('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;activeCat=b.dataset.cat;visibleProductCount=12;renderCategoryFilters();renderProducts()});document.querySelectorAll('[data-navcat]').forEach(a=>a.addEventListener('click',()=>{activeCat=a.dataset.navcat;visibleProductCount=12;renderCategoryFilters();renderProducts()}));$('#cartOpen').onclick=openCart;$('#mobileCart').onclick=openCart;$('#cartClose').onclick=closeCart;$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeCart()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart()});$('#year').textContent=new Date().getFullYear();initStoreStats();api('/api/store').then(s=>{storeConfig=s;if(s.whatsapp)$('#contactInfo').textContent='WhatsApp: '+s.whatsapp}).catch(()=>{});loadOffers();updateCount();loadProducts();
+$('#search').addEventListener('input',()=>{visibleProductCount=12;renderProducts()});$('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;activeCat=b.dataset.cat;visibleProductCount=12;renderCategoryFilters();renderProducts()});document.querySelectorAll('[data-navcat]').forEach(a=>a.addEventListener('click',()=>{activeCat=a.dataset.navcat;visibleProductCount=12;renderCategoryFilters();renderProducts()}));$('#cartOpen').onclick=openCart;$('#mobileCart').onclick=openCart;$('#cartClose').onclick=closeCart;$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeCart()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart()});$('#year').textContent=new Date().getFullYear();initStoreStats();api('/api/store').then(s=>{storeConfig=s;if(s.whatsapp)$('#contactInfo').textContent='WhatsApp: '+s.whatsapp}).catch(()=>{});loadOffers();updateCount();initAppearance();loadProducts();
 
 let offers=[],selectedOfferId=null;
 async function loadOffers(){try{offers=await api('/api/offers');renderOffers()}catch(e){}}
