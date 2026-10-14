@@ -434,3 +434,7 @@ button:active,.btn:active,.primary:active,.outline:active,.checkout:active{trans
 
 /* Slightly zoom product photos inside the hero gift-box circle */
 .hero-product-orb .hero-product-photo{width:92%;height:92%;object-fit:contain;transform-origin:center;filter:drop-shadow(0 12px 14px #102a244a)}
+
+/* Remove the colored circle behind rotating product photos */
+.hero-product-orb{background:transparent!important;box-shadow:none!important;border-radius:0!important}
+.hero-product-orb .hero-product-photo{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 14px #102a2440)}
