@@ -367,3 +367,41 @@ footer .copyright{text-align:center;padding-top:17px;margin-top:12px;border-top:
 @media(max-width:850px){#offerSection{padding:22px 14px}#offerSection .offer-strip{grid-auto-columns:calc((100% - 18px)/2)}#offerSection .offer-showcase-image,#offerSection .offer-showcase-art{height:150px;min-height:150px}}
 @media(max-width:560px){#offerSection{border-radius:18px;padding:20px 10px}#offerSection .offer-heading{margin-bottom:17px}#offerSection .offer-heading p{font-size:12px}#offerSection .offer-strip{grid-auto-columns:84%;gap:12px;padding-bottom:12px}#offerSection .offer-showcase-image,#offerSection .offer-showcase-art{height:160px;min-height:160px}#offerSection .offer-showcase-content{padding:14px}#offerSection .offer-nav{width:34px;height:34px;font-size:25px}#offerSection .offer-prev{left:-8px}#offerSection .offer-next{right:-8px}}
 @media(prefers-reduced-motion:reduce){#offerSection .offer-showcase{animation:none;transition:none}#offerSection .offer-strip{scroll-behavior:auto}}
+
+
+/* Feriwala offers: exactly three equal cards in one horizontal row */
+#offerSection .offer-carousel-wrap{display:block;position:relative;width:100%;padding:0 34px}
+#offerSection .offer-strip{display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;gap:14px!important;width:100%!important;padding:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;border:1px solid #e5d29a;border-radius:18px;background:linear-gradient(110deg,#fff9e9,#fffdf8 52%,#f4faf2);box-sizing:border-box}
+#offerSection .offer-strip::-webkit-scrollbar{display:none}
+#offerSection .offer-showcase,#offerSection .offer-showcase-event{display:grid!important;grid-column:auto!important;grid-template-columns:minmax(76px,28%) minmax(0,1fr)!important;flex:0 0 calc((100% - 28px)/3)!important;width:calc((100% - 28px)/3)!important;min-width:0!important;max-width:calc((100% - 28px)/3)!important;min-height:180px;box-sizing:border-box;scroll-snap-align:start}
+#offerSection .offer-showcase-image,#offerSection .offer-showcase-art,#offerSection .offer-showcase-event .offer-showcase-image,#offerSection .offer-showcase-event .offer-showcase-art{height:100%!important;min-height:180px!important;max-height:none!important;object-fit:cover}
+#offerSection .offer-showcase-content{gap:6px;padding:12px!important}
+#offerSection .offer-showcase-content h3{font-size:clamp(13px,1.25vw,17px);line-height:1.35}
+#offerSection .offer-showcase-content p{font-size:12px;line-height:1.4}
+#offerSection .offer-showcase-cta{padding:8px 10px;font-size:11px}
+#offerSection .offer-nav{position:absolute;top:50%;z-index:2;transform:translateY(-50%);width:30px;height:40px;border:1px solid #d9e3d5;border-radius:10px;background:#fff;color:#214f36;font-size:25px;line-height:1;box-shadow:0 3px 10px #00000012;cursor:pointer}
+#offerSection .offer-prev{left:0}
+#offerSection .offer-next{right:0}
+#offerSection .offer-carousel-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+#offerSection .offer-carousel-dots span{width:7px;height:7px;border-radius:50%;background:#d7dfd2;transition:all .2s}
+#offerSection .offer-carousel-dots span.active{width:20px;border-radius:8px;background:#214f36}
+@media(max-width:760px){
+ #offerSection .offer-carousel-wrap{padding:0 26px}
+ #offerSection .offer-strip{gap:10px!important;padding:8px!important}
+ #offerSection .offer-showcase,#offerSection .offer-showcase-event{grid-template-columns:1fr!important;flex-basis:calc((100% - 20px)/3)!important;width:calc((100% - 20px)/3)!important;max-width:calc((100% - 20px)/3)!important;min-height:190px}
+ #offerSection .offer-showcase-image,#offerSection .offer-showcase-art,#offerSection .offer-showcase-event .offer-showcase-image,#offerSection .offer-showcase-event .offer-showcase-art{height:72px!important;min-height:72px!important;font-size:25px}
+ #offerSection .offer-showcase-content{padding:8px!important;gap:5px}
+ #offerSection .offer-showcase-kicker{font-size:8px;letter-spacing:.4px}
+ #offerSection .offer-showcase-content h3{font-size:12px}
+ #offerSection .offer-showcase-content p{font-size:10px}
+ #offerSection .offer-showcase-price,#offerSection .offer-showcase-delivery{font-size:10px}
+ #offerSection .offer-showcase-cta{width:100%;padding:7px 4px;font-size:10px}
+}
+@media(max-width:390px){
+ #offerSection .offer-carousel-wrap{padding:0 22px}
+ #offerSection .offer-strip{gap:7px!important;padding:6px!important}
+ #offerSection .offer-showcase,#offerSection .offer-showcase-event{flex-basis:calc((100% - 14px)/3)!important;width:calc((100% - 14px)/3)!important;max-width:calc((100% - 14px)/3)!important}
+ #offerSection .offer-showcase-content{padding:6px!important}
+ #offerSection .offer-showcase-content h3{font-size:11px}
+ #offerSection .offer-showcase-kicker{font-size:7px}
+}
