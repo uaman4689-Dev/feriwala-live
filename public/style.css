@@ -442,3 +442,10 @@ button:active,.btn:active,.primary:active,.outline:active,.checkout:active{trans
 /* Correction: keep the original hero circle and change only the product-photo presentation */
 .hero-product-orb{background:#f4e8c7!important;box-shadow:0 22px 60px #122d2555!important;border-radius:50%!important;overflow:hidden}
 .hero-product-orb .hero-product-photo{width:92%;height:92%;object-fit:contain;background:transparent;border-radius:12px;filter:drop-shadow(0 12px 14px #102a2440)}
+
+
+/* Product images: clean plain-white background while keeping the original layout */
+.product-art{background:#fff!important}
+.product-art img,.product-art picture,.product-art picture img{background:#fff!important}
+.hero-product-orb{background:#fff!important;box-shadow:0 22px 60px #122d251c!important}
+.hero-product-orb .hero-product-photo{background:#fff!important;border-radius:0!important;filter:drop-shadow(0 8px 10px #00000012)!important}
