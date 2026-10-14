@@ -431,3 +431,6 @@ button:active,.btn:active,.primary:active,.outline:active,.checkout:active{trans
 @keyframes heroProductPhotoIn{from{opacity:0;transform:translateY(12px) scale(.88) rotate(-5deg)}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
 @keyframes heroProductOrbIn{0%{transform:rotate(-8deg) scale(.94)}55%{transform:rotate(2deg) scale(1.025)}100%{transform:rotate(-3deg) scale(1)}}
 @media(prefers-reduced-motion:reduce){.hero-product-orb,.hero-product-orb .hero-product-photo{animation:none!important;transition:none!important}}
+
+/* Slightly zoom product photos inside the hero gift-box circle */
+.hero-product-orb .hero-product-photo{width:92%;height:92%;object-fit:contain;transform-origin:center;filter:drop-shadow(0 12px 14px #102a244a)}
