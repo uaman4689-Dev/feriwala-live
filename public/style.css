@@ -405,3 +405,54 @@ footer .copyright{text-align:center;padding-top:17px;margin-top:12px;border-top:
  #offerSection .offer-showcase-content h3{font-size:11px}
  #offerSection .offer-showcase-kicker{font-size:7px}
 }
+
+
+/* Feriwala 2026 modern UI polish + customer-selectable themes */
+:root{color-scheme:light;--bg:#fbfcf8;--surface:#fff;--ink:#1e2a22;--muted:#69776c;--line:#e3e9df;--green:#24583b;--pale:#e7f2e8;--cream:#f7f3e8;--gold:#edce83;--shadow-soft:0 10px 32px rgba(24,55,34,.07)}
+body{background:var(--bg);color:var(--ink);transition:background .25s,color .25s}
+.topline{background:linear-gradient(100deg,var(--green),color-mix(in srgb,var(--green),#101b14 24%))}
+.wrap{max-width:1240px}
+.header{position:relative;gap:12px;padding:16px 0;border-bottom-color:var(--line)}
+.brand b{font-size:30px;letter-spacing:-1.4px}.brand b span{color:var(--green)}
+.search input{background:var(--surface);border-color:var(--line);transition:border-color .2s,box-shadow .2s}
+.search input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green),transparent 88%)}
+.nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--surface),transparent 8%);border-bottom:1px solid var(--line)}
+.nav a{transition:color .2s,background .2s;border-radius:10px}.nav a:hover{color:var(--green);background:var(--pale)}
+.hero{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--green),transparent 86%);border-radius:28px;background:radial-gradient(circle at 85% 10%,color-mix(in srgb,var(--gold),transparent 55%),transparent 35%),linear-gradient(120deg,var(--cream),var(--surface) 62%,var(--pale));box-shadow:var(--shadow-soft);padding:clamp(26px,5vw,60px);margin:24px 0 36px;animation:feri-rise .55s ease both}
+.hero h1{letter-spacing:-.7px;line-height:1.35}.hero-art .orb{box-shadow:0 18px 45px color-mix(in srgb,var(--green),transparent 82%);animation:feri-float 4.5s ease-in-out infinite}
+.float{box-shadow:0 8px 24px #172b1812;animation:feri-float 5s ease-in-out infinite}.float.two{animation-delay:-2.2s}
+.primary,.checkout,.offer-showcase-cta{background:var(--green);transition:transform .2s,filter .2s,box-shadow .2s}
+.primary:hover,.checkout:hover,.offer-showcase-cta:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 8px 20px color-mix(in srgb,var(--green),transparent 78%)}
+.pills{gap:10px}.pill{border:1px solid var(--line);background:var(--surface);transition:transform .2s,background .2s,border-color .2s}.pill:hover{transform:translateY(-2px);border-color:var(--green)}.pill.active{background:var(--green);border-color:var(--green);color:#fff}
+.products{gap:18px}.product-card,.products .card{border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 18px #14271808;transition:transform .22s ease,box-shadow .22s ease,border-color .22s}
+.product-card:hover,.products .card:hover{transform:translateY(-5px);box-shadow:0 15px 34px #14271814;border-color:color-mix(in srgb,var(--green),transparent 65%)}
+.benefits{gap:14px}.benefits article{border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 5px 18px #14271806;transition:transform .2s}.benefits article:hover{transform:translateY(-3px)}
+.track-section,.customer-reviews{border-radius:22px;background:var(--surface);box-shadow:var(--shadow-soft);border-color:var(--line)}
+footer .copyright{text-align:center;width:100%;padding-top:18px;border-top:1px solid var(--line)}
+.mobilebar{backdrop-filter:blur(16px);background:color-mix(in srgb,var(--surface),transparent 8%);border-top:1px solid var(--line)}
+.appearance-tools{position:relative;flex-shrink:0}.appearance-trigger{display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-weight:800;font-size:13px;white-space:nowrap;transition:border-color .2s,transform .2s}.appearance-trigger:hover{border-color:var(--green);transform:translateY(-1px)}
+.appearance-panel{position:absolute;right:0;top:calc(100% + 12px);z-index:1000;width:260px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 18px 55px #0002;animation:feri-rise .18s ease both}.appearance-panel[hidden]{display:none}
+.appearance-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}.appearance-panel-head button{width:30px;height:30px;border:0;border-radius:9px;background:var(--pale);color:var(--ink);font-size:21px;cursor:pointer}
+.theme-switch-row{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:15px 0;padding:12px;border:1px solid var(--line);border-radius:12px;font-size:13px;font-weight:750;cursor:pointer}.theme-switch-row input{position:absolute;right:10px;opacity:0;width:42px;height:24px;cursor:pointer}
+.switch-ui{width:38px;height:22px;flex-shrink:0;border-radius:20px;background:#a8b0a7;transition:background .2s;pointer-events:none}.switch-ui:after{content:"";display:block;width:16px;height:16px;margin:3px;border-radius:50%;background:white;transition:transform .2s}.theme-switch-row input:checked+.switch-ui{background:var(--green)}.theme-switch-row input:checked+.switch-ui:after{transform:translateX(16px)}
+.appearance-label{margin:12px 0 9px;font-size:12px;color:var(--muted);font-weight:800}.theme-swatches{display:flex;gap:11px;align-items:center}
+.theme-swatches button{width:30px;height:30px;border:3px solid var(--surface);outline:1px solid var(--line);border-radius:50%;cursor:pointer;transition:transform .18s,outline .18s}.theme-swatches button:hover{transform:scale(1.12)}.theme-swatches button.selected{outline:2px solid var(--ink);transform:scale(1.08)}
+.theme-swatches [data-theme-color="green"]{background:#24583b}.theme-swatches [data-theme-color="blue"]{background:#2456a6}.theme-swatches [data-theme-color="purple"]{background:#7041a6}.theme-swatches [data-theme-color="rose"]{background:#b43f68}.theme-swatches [data-theme-color="orange"]{background:#a94c18}
+.appearance-reset{width:100%;margin-top:14px;padding:9px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:12px;font-weight:800;cursor:pointer}
+html[data-theme="dark"]{color-scheme:dark;--bg:#101612;--surface:#19221c;--ink:#eef5ee;--muted:#a5b2a7;--line:#2b3b30;--cream:#1a261e;--pale:#263b2c;--gold:#69552a}
+html[data-theme="dark"] body{background:var(--bg);color:var(--ink)}html[data-theme="dark"] .topline{color:#f6fff7}html[data-theme="dark"] .nav{background:color-mix(in srgb,var(--surface),transparent 7%)}
+html[data-theme="dark"] .hero{background:radial-gradient(circle at 85% 10%,color-mix(in srgb,var(--gold),transparent 72%),transparent 35%),linear-gradient(120deg,var(--cream),var(--surface) 62%,var(--pale));border-color:var(--line)}
+html[data-theme="dark"] .offer-showcase,html[data-theme="dark"] .offer-showcase-combo,html[data-theme="dark"] .offer-showcase-event{background:var(--surface);border-color:var(--line)}
+html[data-theme="dark"] .offer-showcase-content h3,html[data-theme="dark"] .offer-showcase-kicker{color:var(--ink)}html[data-theme="dark"] .offer-showcase-content p{color:var(--muted)}
+html[data-theme="dark"] .offer-strip{background:var(--bg)!important;border-color:var(--line)!important}html[data-theme="dark"] .offer-showcase-art{background:var(--pale)!important}
+html[data-theme="dark"] .offer-showcase-price{color:#f3ce7b}html[data-theme="dark"] .offer-showcase-delivery{color:#85d9a5}
+html[data-theme="dark"] .offer-nav,html[data-theme="dark"] .search input,html[data-theme="dark"] .pill,html[data-theme="dark"] .appearance-trigger{background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .track-section,html[data-theme="dark"] .customer-reviews,html[data-theme="dark"] .review-submit-details,html[data-theme="dark"] .appearance-panel,html[data-theme="dark"] .appearance-reset{background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .product-card,html[data-theme="dark"] .products .card,html[data-theme="dark"] .benefits article,html[data-theme="dark"] .offer-card,html[data-theme="dark"] .cart-row{background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="dark"] select{background:#111a14;color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .mobilebar{background:color-mix(in srgb,var(--surface),transparent 6%)}html[data-theme="dark"] .member-panel,html[data-theme="dark"] .drawer{background:var(--surface);color:var(--ink)}
+html[data-theme="dark"] .hero p,html[data-theme="dark"] .benefits small{color:var(--muted)}
+@keyframes feri-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes feri-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(max-width:900px){.header{flex-wrap:wrap}.appearance-tools{order:4}.appearance-panel{right:0}.search-wholesale{flex:1;min-width:220px}}
+@media(max-width:600px){.wrap{padding:0 14px}.header{gap:8px;padding:12px 0}.brand b{font-size:26px}.appearance-trigger{padding:8px 10px}.appearance-panel{position:fixed;top:auto;right:12px;bottom:78px;width:min(290px,calc(100vw - 24px))}.hero{border-radius:20px;margin:16px 0 28px;padding:24px 18px}.hero h1{font-size:clamp(27px,7vw,38px)}.products{gap:11px}.nav{overflow-x:auto;white-space:nowrap}.nav a{flex-shrink:0}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
