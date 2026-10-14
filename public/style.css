@@ -422,3 +422,12 @@ button:active,.btn:active,.primary:active,.outline:active,.checkout:active{trans
 .pill,.category-chip{transition:background-color .2s ease,color .2s ease,transform .2s ease}
 .pill:hover,.category-chip:hover{transform:translateY(-2px)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Rotating real product photos in the existing hero gift-box area */
+.hero-product-orb{overflow:hidden;position:relative;isolation:isolate;transition:transform .35s ease,box-shadow .35s ease}
+.hero-product-orb .hero-product-photo{display:block;width:76%;height:76%;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 10px 12px #102a2440);animation:heroProductPhotoIn .55s cubic-bezier(.2,.75,.25,1) both}
+.hero-product-orb.hero-product-enter{animation:heroProductOrbIn .65s ease both}
+#heroProductName{max-width:68%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .25s ease}
+@keyframes heroProductPhotoIn{from{opacity:0;transform:translateY(12px) scale(.88) rotate(-5deg)}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+@keyframes heroProductOrbIn{0%{transform:rotate(-8deg) scale(.94)}55%{transform:rotate(2deg) scale(1.025)}100%{transform:rotate(-3deg) scale(1)}}
+@media(prefers-reduced-motion:reduce){.hero-product-orb,.hero-product-orb .hero-product-photo{animation:none!important;transition:none!important}}
